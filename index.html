@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<title>ChemiAI – রসায়ন শিক্ষক</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f8f7;--card:#fff;--ink:#1c2b27;--mute:#5d6f69;--brand:#0f7b63;--brand-ink:#fff;--bub:#e3f3ee;--line:#d8e2de;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111a17;--card:#1a2622;--ink:#e6efec;--mute:#93a8a1;--brand:#2fb894;--brand-ink:#08201a;--bub:#1f3a33;--line:#2c3d37;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111a17;--card:#1a2622;--ink:#e6efec;--mute:#93a8a1;--brand:#2fb894;--brand-ink:#08201a;--bub:#1f3a33;--line:#2c3d37;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans Bengali","Kalpurush","Siyam Rupali",system-ui,sans-serif;display:flex;flex-direction:column;line-height:1.7}
+header{padding:12px 16px;background:var(--brand);color:var(--brand-ink)}
+header h1{margin:0;font-size:1.15rem}
+header p{margin:0;font-size:.85rem;opacity:.9}
+#chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;max-width:760px;width:100%;margin:0 auto}
+.msg{padding:10px 14px;border-radius:14px;max-width:92%;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere}
+.u{align-self:flex-end;background:var(--brand);color:var(--brand-ink)}
+.a{align-self:flex-start;background:var(--card);border:1px solid var(--line)}
+.hint{color:var(--mute);font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--bub);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:.88rem;cursor:pointer}
+.bar{border-top:1px solid var(--line);background:var(--card);padding:10px 12px}
+.row{display:flex;gap:8px;max-width:760px;margin:0 auto}
+.sel{max-width:760px;margin:0 auto 8px;display:flex;gap:8px}
+select{flex:1;font:inherit;font-size:.88rem;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0}
+textarea{flex:1;font:inherit;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:none;min-height:46px;max-height:140px}
+button.send{border:0;border-radius:12px;background:var(--brand);color:var(--brand-ink);font:inherit;font-weight:700;padding:0 18px;cursor:pointer}
+button:disabled{opacity:.5}
+</style>
+</head>
+<body>
+<header><h1>⚗️ ChemiAI – তোমার রসায়ন শিক্ষক</h1><p>SSC (নবম–দশম) · NCTB পাঠ্যবই অনুসারে</p></header>
+<main id="chat" aria-live="polite">
+  <div class="msg a">আসসালামু আলাইকুম! আমি তোমার রসায়ন শিক্ষক। যেকোনো রসায়নের প্রশ্ন লেখো, আমি সহজ বাংলায় ধাপে ধাপে বুঝিয়ে দেব। 😊
+    <div class="chips" id="chips"></div>
+  </div>
+</main>
+<div class="bar">
+  <div class="sel"><select id="chap" aria-label="অধ্যায়"><option value="">অধ্যায় (ঐচ্ছিক)</option></select></div>
+  <div class="row"><textarea id="q" rows="1" placeholder="তোমার প্রশ্ন লেখো… (যেমন: Fe + O₂ → Fe₂O₃ সমতা করো)"></textarea><button class="send" id="go">পাঠাও</button></div>
+</div>
+<script>
+var CH=[["১","Concepts of Chemistry","রসায়নের ধারণা","1-16"],["২","States of Matter","পদার্থের অবস্থা","17-34"],["৩","Structure of Matter","পদার্থের গঠন","35-58"],["৪","Periodic Table","পর্যায় সারণি","59-81"],["৫","Chemical Bond","রাসায়নিক বন্ধন","82-108"],["৬","Concept of Mole and Chemical Counting","মোল ধারণা ও রাসায়নিক গণনা","109-141"],["৭","Chemical Reactions","রাসায়নিক বিক্রিয়া","142-167"],["৮","Chemistry and Energy","রসায়ন ও শক্তি","168-205"],["৯","Acid-Base Balance","এসিড-ক্ষার সমতা","206-232"],["১০","Mineral Resources: Metal-Nonmetal","খনিজ সম্পদ: ধাতু-অধাতু","233-260"],["১১","Mineral Resources: Fossils","খনিজ সম্পদ: জীবাশ্ম","261-286"],["১২","Chemistry in Our Lives","আমাদের জীবনে রসায়ন","287-304"]];
+var chat=document.getElementById("chat"),q=document.getElementById("q"),go=document.getElementById("go"),chap=document.getElementById("chap"),hist=[];
+CH.forEach(function(c){var o=document.createElement("option");o.value=c[0];o.textContent="অধ্যায় "+c[0]+": "+c[2];chap.appendChild(o)});
+["Fe + O₂ → Fe₂O₃ সমতা করো","১ মোল পানিতে কয়টি অণু থাকে?","জারণ-বিজারণ কী?","NaOH + HCl বিক্রিয়াটি বুঝিয়ে দাও"].forEach(function(t){var b=document.createElement("button");b.className="chip";b.textContent=t;b.onclick=function(){q.value=t;send()};document.getElementById("chips").appendChild(b)});
+function add(cls,t){var d=document.createElement("div");d.className="msg "+cls;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
+async function send(){
+  var t=q.value.trim();if(!t||go.disabled)return;
+  if(t.length>1200){add("a","প্রশ্নটি একটু ছোট করে লেখো (১২০০ অক্ষরের মধ্যে)।");return}
+  q.value="";add("u",t);hist.push({role:"user",content:t});
+  var out=add("a hint","একটু ভাবছি… ⏳");go.disabled=true;
+  try{
+    var r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:hist,chapter:chap.value})});
+    if(!r.ok){out.className="msg a";out.textContent=await r.text();hist.pop();return}
+    var reader=r.body.getReader(),dec=new TextDecoder(),full="";
+    for(;;){var s=await reader.read();if(s.done)break;full+=dec.decode(s.value,{stream:true});out.className="msg a";out.textContent=full;chat.scrollTop=chat.scrollHeight}
+    hist.push({role:"assistant",content:full});
+  }catch(e){
+    out.className="msg a";out.textContent="ইন্টারনেট সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করো।";hist.pop();
+  }finally{go.disabled=false}
+}
+go.onclick=send;
+q.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
+</script>
+</body>
+</html>
