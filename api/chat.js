@@ -3,6 +3,7 @@
 
 // FREE version: uses Google Gemini's free tier (key from Google AI Studio, no card).
 // Set GEMINI_MODEL to a model that shows "Free of charge" on Google's pricing page.
+const NOTES = require("./notes");
 const MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
 const MAX_OUTPUT_TOKENS = 2000;       // cap per answer
 const MAX_MESSAGES = 8;               // history sent per request
@@ -49,6 +50,13 @@ ${CHAPTERS.map(c => `${c[0]}. ${c[1]} (${c[2]}) পৃষ্ঠা ${c[3]}`).joi
 // ---- simple in-memory rate limiting (resets on cold start; see README for Upstash upgrade)
 const hits = globalThis.__hits || (globalThis.__hits = new Map());
 const daily = globalThis.__daily || (globalThis.__daily = { day: "", n: 0 });
+
+// Find which chapter notes to attach: the chapter the student picked, or a guess from keywords.
+function notesFor(chapter, text) {
+  let key = NOTES[chapter] ? chapter : null;
+  if (!key && /mole|মোল|molar|মোলার|molarity|empirical|molecular formula|balanc|সমতা|limiting|yield|stoichio|avogadro|অ্যাভোগ্যাড্রো|percent composition|শতকরা/i.test(text || "")) key = "৬";
+  return key ? "\n\n--- পাঠ্যবইয়ের নোট (শুধু প্রাসঙ্গিক হলে ব্যবহার করো; বইয়ের পদ্ধতি, পারমাণবিক ভর ও পৃষ্ঠা নম্বর অনুসরণ করো) ---\n" + NOTES[key] : "";
+}
 
 function limited(ip) {
   const now = Date.now();
@@ -116,7 +124,7 @@ module.exports = async function handler(req, res) {
         method: "POST",
         headers: { "content-type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
         body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM }] },
+          systemInstruction: { parts: [{ text: SYSTEM + notesFor(body && body.chapter, messages[messages.length - 1].content) }] },
           contents: messages.map((m, i) => {
             const parts = [{ text: m.content }];
             if (image && i === messages.length - 1) parts.push({ inlineData: { mimeType: "image/jpeg", data: image } });
