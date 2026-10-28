@@ -33,6 +33,7 @@ button:disabled{opacity:.5}
 .pv{max-width:760px;margin:0 auto 8px;display:none;align-items:center;gap:8px}
 .pv img{height:56px;border-radius:8px;border:1px solid var(--line)}
 .pv button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;font:inherit;padding:2px 10px;cursor:pointer}
+.note{max-width:760px;margin:6px auto 0;color:var(--mute);font-size:.78rem;text-align:center}
 .cam{border:1px solid var(--line);background:var(--bg);border-radius:12px;font-size:1.3rem;padding:0 12px;cursor:pointer}
 .msg img{display:block;max-width:180px;max-height:180px;border-radius:8px;margin-bottom:6px}
 </style>
@@ -48,6 +49,7 @@ button:disabled{opacity:.5}
   <div class="sel"><select id="chap" aria-label="অধ্যায়"><option value="">অধ্যায় (ঐচ্ছিক)</option></select></div>
   <div class="pv" id="pv"><img id="pvi" alt="ছবি"><button id="pvx" aria-label="ছবি সরাও">✕ সরাও</button></div>
   <div class="row"><button class="cam" id="pick" aria-label="ছবি তোলো বা বাছাই করো" title="ছবি দাও">📷</button><input type="file" id="file" accept="image/*" hidden><textarea id="q" rows="1" placeholder="প্রশ্ন লেখো বা 📷 দিয়ে ছবি দাও…"></textarea><button class="send" id="go">পাঠাও</button></div>
+  <div class="note">🔒 নাম, ফোন নম্বর বা ব্যক্তিগত তথ্য লিখো না। উত্তর AI দেয়, তাই গুরুত্বপূর্ণ হিসাব পাঠ্যবই ও শিক্ষকের সাথে মিলিয়ে নিও।</div>
 </div>
 <script>
 var CH=[["১","Concepts of Chemistry","রসায়নের ধারণা","1-16"],["২","States of Matter","পদার্থের অবস্থা","17-34"],["৩","Structure of Matter","পদার্থের গঠন","35-58"],["৪","Periodic Table","পর্যায় সারণি","59-81"],["৫","Chemical Bond","রাসায়নিক বন্ধন","82-108"],["৬","Concept of Mole and Chemical Counting","মোল ধারণা ও রাসায়নিক গণনা","109-141"],["৭","Chemical Reactions","রাসায়নিক বিক্রিয়া","142-167"],["৮","Chemistry and Energy","রসায়ন ও শক্তি","168-205"],["৯","Acid-Base Balance","এসিড-ক্ষার সমতা","206-232"],["১০","Mineral Resources: Metal-Nonmetal","খনিজ সম্পদ: ধাতু-অধাতু","233-260"],["১১","Mineral Resources: Fossils","খনিজ সম্পদ: জীবাশ্ম","261-286"],["১২","Chemistry in Our Lives","আমাদের জীবনে রসায়ন","287-304"]];
