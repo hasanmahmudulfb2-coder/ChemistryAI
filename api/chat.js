@@ -51,11 +51,17 @@ ${CHAPTERS.map(c => `${c[0]}. ${c[1]} (${c[2]}) পৃষ্ঠা ${c[3]}`).joi
 const hits = globalThis.__hits || (globalThis.__hits = new Map());
 const daily = globalThis.__daily || (globalThis.__daily = { day: "", n: 0 });
 
-// Find which chapter notes to attach: the chapter the student picked, or a guess from keywords.
+// Keywords that suggest a chapter when the student did not pick one.
+const KEYWORDS = {
+  "৬": /mole|মোল|molar|মোলার|molarity|empirical|molecular formula|balanc|সমতা|limiting|yield|stoichio|avogadro|অ্যাভোগ্যাড্রো|percent composition|শতকরা/i,
+  "৭": /oxidation|redox|জারণ|বিজারণ|oxidant|reductant|exothermic|endothermic|তাপহারী|তাপউৎপাদী|le chatelier|equilibrium|সাম্যাবস্থা|neutraliz|প্রশমন|precipitat|অধঃক্ষেপ|rate of reaction|reversible|rust|মরিচা|isomeri|polymeri|hydrolysis|hydration/i,
+};
+
+// Attach notes: the chapter the student picked, or up to 2 chapters guessed from keywords.
 function notesFor(chapter, text) {
-  let key = NOTES[chapter] ? chapter : null;
-  if (!key && /mole|মোল|molar|মোলার|molarity|empirical|molecular formula|balanc|সমতা|limiting|yield|stoichio|avogadro|অ্যাভোগ্যাড্রো|percent composition|শতকরা/i.test(text || "")) key = "৬";
-  return key ? "\n\n--- পাঠ্যবইয়ের নোট (শুধু প্রাসঙ্গিক হলে ব্যবহার করো; বইয়ের পদ্ধতি, পারমাণবিক ভর ও পৃষ্ঠা নম্বর অনুসরণ করো) ---\n" + NOTES[key] : "";
+  let keys = NOTES[chapter] ? [chapter] : Object.keys(KEYWORDS).filter(k => NOTES[k] && KEYWORDS[k].test(text || "")).slice(0, 2);
+  if (!keys.length) return "";
+  return "\n\n--- পাঠ্যবইয়ের নোট (শুধু প্রাসঙ্গিক হলে ব্যবহার করো; বইয়ের পদ্ধতি, পারমাণবিক ভর ও পৃষ্ঠা নম্বর অনুসরণ করো) ---\n" + keys.map(k => NOTES[k]).join("\n\n");
 }
 
 function limited(ip) {
