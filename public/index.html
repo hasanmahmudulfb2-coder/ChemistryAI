@@ -56,6 +56,19 @@ var CH=[["১","Concepts of Chemistry","রসায়নের ধারণা
 var chat=document.getElementById("chat"),q=document.getElementById("q"),go=document.getElementById("go"),chap=document.getElementById("chap"),hist=[];
 CH.forEach(function(c){var o=document.createElement("option");o.value=c[0];o.textContent="অধ্যায় "+c[0]+": "+c[2];chap.appendChild(o)});
 ["Fe + O₂ → Fe₂O₃ সমতা করো","১ মোল পানিতে কয়টি অণু থাকে?","জারণ-বিজারণ কী?","NaOH + HCl বিক্রিয়াটি বুঝিয়ে দাও"].forEach(function(t){var b=document.createElement("button");b.className="chip";b.textContent=t;b.onclick=function(){q.value=t;send()};document.getElementById("chips").appendChild(b)});
+var SUP={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹","+":"⁺","-":"⁻","−":"⁻"},SUB={"0":"₀","1":"₁","2":"₂","3":"₃","4":"₄","5":"₅","6":"₆","7":"₇","8":"₈","9":"₉"};
+function mp(s,m){return s.replace(/./g,function(c){return m[c]||c})}
+function tidy(t){
+  return t.replace(/\\[()\[\]]/g,"").replace(/\$/g,"")
+   .replace(/\\times/g,"×").replace(/\\cdot/g,"·").replace(/\\div/g,"÷").replace(/\\approx/g,"≈")
+   .replace(/\\(?:rightarrow|to|longrightarrow)(?![a-zA-Z])/g,"→").replace(/\\leftrightarrow/g,"↔").replace(/\\rightleftharpoons/g,"⇌")
+   .replace(/\\(?:degree|circ)/g,"°").replace(/\\%/g,"%").replace(/\\[,;! ]/g," ")
+   .replace(/\\(?:text|mathrm|textbf|mathbf)\{([^{}]*)\}/g,function(m,a){return a})
+   .replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g,function(m,a,b){return "("+a+")/("+b+")"})
+   .replace(/\^\{([^{}]*)\}/g,function(m,a){return mp(a,SUP)}).replace(/\^([+\-−]?\d*[+\-−]?)/g,function(m,a){return a?mp(a,SUP):m})
+   .replace(/_\{([^{}]*)\}/g,function(m,a){return mp(a,SUB)})
+   .replace(/\*\*([^*\n]+)\*\*/g,function(m,a){return a}).replace(/^#{1,6}\s+/gm,"");
+}
 function add(cls,t){var d=document.createElement("div");d.className="msg "+cls;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
 var img=null,pick=document.getElementById("pick"),file=document.getElementById("file"),pv=document.getElementById("pv"),pvi=document.getElementById("pvi");
 pick.onclick=function(){file.click()};
@@ -79,8 +92,8 @@ async function send(){
     var r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:hist,chapter:chap.value,image:cur?cur.data:null})});
     if(!r.ok){out.className="msg a";out.textContent=await r.text();hist.pop();return}
     var reader=r.body.getReader(),dec=new TextDecoder(),full="";
-    for(;;){var s=await reader.read();if(s.done)break;full+=dec.decode(s.value,{stream:true});out.className="msg a";out.textContent=full;chat.scrollTop=chat.scrollHeight}
-    hist.push({role:"assistant",content:full});
+    for(;;){var s=await reader.read();if(s.done)break;full+=dec.decode(s.value,{stream:true});out.className="msg a";out.textContent=tidy(full);chat.scrollTop=chat.scrollHeight}
+    full=tidy(full);out.textContent=full;hist.push({role:"assistant",content:full});
   }catch(e){
     out.className="msg a";out.textContent="ইন্টারনেট সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করো।";hist.pop();
   }finally{go.disabled=false}
