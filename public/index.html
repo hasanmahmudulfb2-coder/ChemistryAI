@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <title>ChemiAI – রসায়ন শিক্ষক</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f6f8f7;--h1:#eaf7f2;--h2:#d3eee4;--glass:rgba(255,255,255,.7);--card:#fff;--ink:#1c2b27;--mute:#5d6f69;--brand:#0f7b63;--brand-ink:#fff;--bub:#e3f3ee;--line:#d8e2de;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -44,9 +43,54 @@ button:disabled{opacity:.5}
 .note{max-width:760px;margin:6px auto 0;color:var(--mute);font-size:.78rem;text-align:center}
 .cam{border:1px solid var(--line);background:var(--bg);border-radius:12px;font-size:1.3rem;padding:0 12px;cursor:pointer}
 .msg img{display:block;max-width:180px;max-height:180px;border-radius:8px;margin-bottom:6px}
+
+@font-face{font-family:"NSB";src:url(vendor/nsb400.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0980-09FF,U+200C-200D,U+0964-0965}
+@font-face{font-family:"NSB";src:url(vendor/nsb700.woff2) format("woff2");font-weight:700;font-display:swap;unicode-range:U+0980-09FF,U+200C-200D,U+0964-0965}
+:root{--fs:1}
+body,button,textarea,select{font-family:"NSB",system-ui,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+header,main,.bar{position:relative;z-index:1}
+.bgart{position:fixed;inset:0;width:100%;height:100%;z-index:0;color:var(--brand);opacity:.085;pointer-events:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .bgart{opacity:.13}}
+a:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+#chat{max-width:1100px;padding:16px clamp(10px,3vw,28px);gap:14px}
+.msg{font-size:calc(1rem*var(--fs))}
+.msg.u{max-width:80%}
+.msg.a{width:100%;max-width:100%;padding:18px clamp(14px,2.5vw,28px);white-space:normal;font-size:calc(1.05rem*var(--fs));line-height:1.9;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.msg.a.hint{width:auto}
+.msg.a>div.h{font-weight:700;color:var(--brand);margin-top:1em;font-size:1.06em}
+.msg.a>div.s{font-weight:700;margin-top:.7em}
+.msg.a>div.e{margin:.35em 0;padding:8px 14px;background:var(--bub);border-left:4px solid var(--brand);border-radius:8px;font-family:"Cambria Math","STIX Two Math","Noto Sans Math","NSB",system-ui,serif;font-size:1.12em;overflow-x:auto;white-space:nowrap}
+.msg.a>div.l{padding-left:1.4em;position:relative}
+.msg.a>div.l::before{content:"•";position:absolute;left:.35em;color:var(--brand);font-weight:700}
+.msg.a>div.bk{height:.5em}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.tools button{min-height:44px;border:1px solid var(--brand);background:var(--bub);color:var(--ink);border-radius:10px;padding:0 14px;font:inherit;font-size:.9rem;cursor:pointer}
+.tools button:hover:not(:disabled){background:var(--brand);color:var(--brand-ink)}
+.row,.sel,.note,.pv{max-width:1100px}
+textarea{min-height:52px;font-size:calc(1rem*var(--fs))}
+button.send,.cam{min-height:52px}
+.fs{display:flex;gap:6px}.fs button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;font:inherit;min-width:44px;min-height:36px;cursor:pointer}
+.sel{display:flex;gap:8px;align-items:center}
+body.chatting .hero{min-height:0;padding:8px 16px}
+body.chatting .hero .art,body.chatting .hero p,body.chatting .hero .tags{display:none}
+body.chatting .hero h1{font-size:1.15rem}
+.sheet{--ink:#1c2b27;--bub:#e3f3ee;--brand:#0f7b63;--line:#d8e2de;--mute:#5d6f69;position:absolute;left:-10000px;top:0;width:794px;padding:36px 44px;background:#fff;color:#1c2b27;font-size:16px;line-height:1.85;box-sizing:border-box}
+.sheet .sh-h{font-size:22px;color:#0f7b63;border-bottom:3px solid #0f7b63;padding-bottom:8px;margin-bottom:12px}
+.sheet .sh-q{font-weight:700;margin-bottom:8px}.sheet img{max-width:260px;display:block;margin:8px 0}
+.sheet .h{font-weight:700;color:#0f7b63;margin-top:12px}.sheet .s{font-weight:700;margin-top:6px}
+.sheet .e{margin:4px 0;padding:6px 12px;background:#e3f3ee;border-left:4px solid #0f7b63;border-radius:6px;font-family:"Cambria Math","STIX Two Math","Noto Sans Math","NSB",serif;font-size:18px}
+.sheet .l{padding-left:22px;position:relative}.sheet .l::before{content:"•";position:absolute;left:6px;color:#0f7b63;font-weight:700}.sheet .bk{height:8px}
+.sheet .sh-f{margin-top:16px;padding-top:8px;border-top:1px solid #d8e2de;font-size:12px;color:#5d6f69}
+@media print{.bgart,.bar,.hero{display:none}}
 </style>
 </head>
 <body>
+<svg class="bgart" aria-hidden="true" focusable="false"><defs><pattern id="chem" width="320" height="270" patternUnits="userSpaceOnUse"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<g transform="translate(62 58)"><ellipse rx="30" ry="11"/><ellipse rx="30" ry="11" transform="rotate(60)"/><ellipse rx="30" ry="11" transform="rotate(120)"/><circle r="4" fill="currentColor"/></g>
+<polygon points="212,26 234,39 234,65 212,78 190,65 190,39"/><circle cx="212" cy="52" r="12"/>
+<path d="M270 150v24l-15 30h46l-15-30v-24M264 150h18"/><path d="M60 170v46a8 8 0 0 0 16 0v-46zM92 180v36a8 8 0 0 0 16 0v-36z"/>
+<g transform="translate(150 150)"><path d="M0 0L26 -14M0 0L24 18M0 0L-26 10"/><circle r="6" fill="currentColor"/><circle cx="26" cy="-14" r="5"/><circle cx="24" cy="18" r="5"/><circle cx="-26" cy="10" r="5"/></g></g>
+<g fill="currentColor" font-family="system-ui,sans-serif" font-weight="700"><text x="110" y="112" font-size="24" transform="rotate(-10 110 112)">H₂O</text><text x="270" y="70" font-size="26">Na</text><text x="14" y="130" font-size="24">Cl</text><text x="170" y="236" font-size="22">CO₂</text><text x="116" y="42" font-size="20">pH</text><text x="22" y="256" font-size="22">Fe</text><text x="250" y="250" font-size="22">O₂</text></g></pattern></defs><rect width="100%" height="100%" fill="url(#chem)"/></svg>
 <header class="hero">
 <svg class="art hl" viewBox="0 0 420 200" preserveAspectRatio="xMinYMid meet" aria-hidden="true">
   <line x1="10" y1="166" x2="410" y2="166" stroke="#3d5a54" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>
@@ -100,13 +144,13 @@ button:disabled{opacity:.5}
 </svg>
 <div class="t"><h1><b>ChemiAI</b> – তোমার রসায়ন শিক্ষক</h1><p>SSC (নবম–দশম) · NCTB পাঠ্যবই অনুসারে</p><div class="tags"><span>📷 ছবি দিয়ে প্রশ্ন</span><span>🧪 ধাপে ধাপে সমাধান</span><span>📖 পাঠ্যবইয়ের সংযোগ</span></div></div>
 </header>
-<main id="chat" aria-live="polite">
+<main id="chat" aria-live="polite" aria-label="কথোপকথন">
   <div class="msg a">আসসালামু আলাইকুম! আমি তোমার রসায়ন শিক্ষক। যেকোনো রসায়নের প্রশ্ন লেখো, আমি সহজ বাংলায় ধাপে ধাপে বুঝিয়ে দেব। 😊
     <div class="chips" id="chips"></div>
   </div>
 </main>
 <div class="bar">
-  <div class="sel"><select id="chap" aria-label="অধ্যায়"><option value="">অধ্যায় (ঐচ্ছিক)</option></select></div>
+  <div class="sel"><div class="fs" role="group" aria-label="লেখার আকার"><button type="button" id="fsm" aria-label="লেখা ছোট করো">A−</button><button type="button" id="fsp" aria-label="লেখা বড় করো">A+</button></div><select id="chap" aria-label="অধ্যায়"><option value="">অধ্যায় (ঐচ্ছিক)</option></select></div>
   <div class="pv" id="pv"><img id="pvi" alt="ছবি"><button id="pvx" aria-label="ছবি সরাও">✕ সরাও</button></div>
   <div class="row"><button class="cam" id="pick" aria-label="ছবি তোলো বা বাছাই করো" title="ছবি দাও">📷</button><input type="file" id="file" accept="image/*" hidden><textarea id="q" rows="1" placeholder="প্রশ্ন লেখো বা 📷 দিয়ে ছবি দাও…"></textarea><button class="send" id="go">পাঠাও</button></div>
   <div class="note">🔒 নাম, ফোন নম্বর বা ব্যক্তিগত তথ্য লিখো না। উত্তর AI দেয়, তাই গুরুত্বপূর্ণ হিসাব পাঠ্যবই ও শিক্ষকের সাথে মিলিয়ে নিও।</div>
@@ -144,7 +188,7 @@ async function send(){
   var t=q.value.trim(),cur=img;if((!t&&!cur)||go.disabled)return;
   if(t.length>1200){add("a","প্রশ্নটি একটু ছোট করে লেখো (১২০০ অক্ষরের মধ্যে)।");return}
   if(!t)t="এই ছবির প্রশ্ন বা সমীকরণটি সমাধান করো।";
-  q.value="";img=null;pv.style.display="none";
+  q.value="";img=null;pv.style.display="none";document.body.classList.add("chatting");
   var ub=add("u",t);if(cur){var im=document.createElement("img");im.src=cur.url;im.alt="ছবি";ub.insertBefore(im,ub.firstChild)}
   hist.push({role:"user",content:cur?t+" (ছবি দেওয়া হয়েছে)":t});
   var out=add("a hint","একটু ভাবছি… ⏳");go.disabled=true;
@@ -152,14 +196,91 @@ async function send(){
     var r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:hist,chapter:chap.value,image:cur?cur.data:null})});
     if(!r.ok){out.className="msg a";out.textContent=await r.text();hist.pop();return}
     var reader=r.body.getReader(),dec=new TextDecoder(),full="";
-    for(;;){var s=await reader.read();if(s.done)break;full+=dec.decode(s.value,{stream:true});out.className="msg a";out.textContent=tidy(full);chat.scrollTop=chat.scrollHeight}
-    full=tidy(full);out.textContent=full;hist.push({role:"assistant",content:full});
-  }catch(e){
-    out.className="msg a";out.textContent="ইন্টারনেট সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করো।";hist.pop();
-  }finally{go.disabled=false}
+    for(;;){var s=await reader.read();if(s.done)break;full+=dec.decode(s.value,{stream:true});out.className="msg a";out.innerHTML=html(tidy(full));chat.scrollTop=chat.scrollHeight}
+    full=tidy(full);out.innerHTML=html(full);hist.push({role:"assistant",content:full});tools(out,t,full,cur&&cur.url);chat.scrollTop=chat.scrollHeight;
+  }catch(e){out.className="msg a";out.textContent="ইন্টারনেট সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করো।";hist.pop()}
+  finally{go.disabled=false}
 }
 go.onclick=send;
 q.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
+/* ---- answer formatting ---- */
+function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+var BN=/[\u0980-\u09FF]/,HD=/^(📌|🪜|✅|📖|💡|📷)/;
+function parse(t){return t.split("\n").map(function(l){var s=l.trim(),m;if(!s)return{k:"b"};
+  if(HD.test(s))return{k:"h",t:s};
+  if(!BN.test(s)&&/[→⇌↔=]/.test(s)&&s.length<110)return{k:"e",t:s};
+  if(/^(ধাপ\s*[\d১-৯০]+|Step\s*\d+)/i.test(s))return{k:"s",t:s};
+  if(m=s.match(/^([-•*]|\d+[.)])\s+(.*)/))return{k:"l",t:m[2]};
+  return{k:"p",t:s}})}
+function html(t){return parse(t).map(function(b){return b.k=="b"?'<div class="bk"></div>':'<div class="'+b.k+'">'+esc(b.t)+'</div>'}).join("")}
+/* ---- downloads ---- */
+var libs={};
+function lib(f){return libs[f]||(libs[f]=new Promise(function(ok,no){var s=document.createElement("script");s.src="vendor/"+f;s.onload=ok;s.onerror=function(){delete libs[f];no(new Error(f))};document.head.appendChild(s)}))}
+function save(b,n){var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=n;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000)}
+function stamp(){var d=new Date(),z=function(n){return(n<10?"0":"")+n};return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+"-"+z(d.getHours())+z(d.getMinutes())}
+async function mkPdf(qt,ans,iu){
+  await lib("html2canvas.min.js");await lib("jspdf.min.js");
+  var sh=document.createElement("div");sh.className="sheet";
+  sh.innerHTML='<div class="sh-h"><b>ChemiAI</b> – তোমার রসায়ন শিক্ষক</div><div class="sh-q">প্রশ্ন: '+esc(qt)+'</div>'+(iu?'<img src="'+iu+'" alt="">':'')+html(ans)+'<div class="sh-f">ChemiAI · NCTB রসায়ন (নবম–দশম) · AI-এর উত্তর, পাঠ্যবই ও শিক্ষকের সাথে মিলিয়ে নিও।</div>';
+  document.body.appendChild(sh);
+  try{
+    await document.fonts.ready;
+    var cv=await html2canvas(sh,{scale:2,backgroundColor:"#fff",scrollX:0,scrollY:0});
+    var H=1050,M=36,bl=[].map.call(sh.children,function(e){return[e.offsetTop,e.offsetTop+e.offsetHeight]}),pages=[],st=0;
+    bl.forEach(function(b){if(b[1]-st>H&&b[0]>st){pages.push([st,b[0]]);st=b[0]}});pages.push([st,sh.offsetHeight]);
+    var pdf=new jspdf.jsPDF({unit:"pt",format:"a4"}),k=pdf.internal.pageSize.getWidth()/794;
+    pages.forEach(function(p,i){var h=p[1]-p[0];if(h<2)return;var c=document.createElement("canvas");c.width=cv.width;c.height=Math.round(h*2);
+      var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(cv,0,p[0]*2,cv.width,c.height,0,0,cv.width,c.height);
+      if(i)pdf.addPage();pdf.addImage(c.toDataURL("image/jpeg",.92),"JPEG",0,M*k,pdf.internal.pageSize.getWidth(),h*k)});
+    return pdf.output("blob");
+  }finally{sh.remove()}
+}
+async function mkDocx(qt,ans){
+  await lib("docx.min.js");var d=docx,F={ascii:"Calibri",hAnsi:"Calibri",cs:"Nirmala UI",eastAsia:"Nirmala UI"},EF={ascii:"Cambria Math",hAnsi:"Cambria Math",cs:"Nirmala UI",eastAsia:"Nirmala UI"};
+  function R(t,o){o=o||{};var sz=o.size||24;return new d.TextRun({text:t,font:o.font||F,size:sz,sizeComplexScript:sz,bold:!!o.bold,boldComplexScript:!!o.bold,color:o.color})}
+  var ch=[new d.Paragraph({spacing:{after:160},children:[R("ChemiAI – তোমার রসায়ন শিক্ষক",{bold:true,size:36,color:"0F7B63"})]}),new d.Paragraph({spacing:{after:200},children:[R("প্রশ্ন: ",{bold:true}),R(qt)]})];
+  parse(ans).forEach(function(b){if(b.k=="b")return;var sp={after:100,line:340};
+    if(b.k=="h")ch.push(new d.Paragraph({spacing:{before:260,after:100},children:[R(b.t,{bold:true,size:28,color:"0F7B63"})]}));
+    else if(b.k=="e")ch.push(new d.Paragraph({spacing:sp,indent:{left:280},shading:{type:d.ShadingType.CLEAR,fill:"E3F3EE",color:"auto"},border:{left:{style:d.BorderStyle.SINGLE,size:18,color:"0F7B63",space:6}},children:[R(b.t,{font:EF,size:26})]}));
+    else if(b.k=="l")ch.push(new d.Paragraph({spacing:sp,bullet:{level:0},children:[R(b.t)]}));
+    else ch.push(new d.Paragraph({spacing:sp,children:[R(b.t,{bold:b.k=="s"})]}))});
+  ch.push(new d.Paragraph({spacing:{before:300},children:[R("ChemiAI · NCTB রসায়ন (নবম–দশম) · AI-এর উত্তর, পাঠ্যবই ও শিক্ষকের সাথে মিলিয়ে নিও।",{size:18,color:"5D6F69"})]}));
+  return d.Packer.toBlob(new d.Document({sections:[{properties:{page:{margin:{top:1000,bottom:1000,left:1100,right:1100}}},children:ch}]}));
+}
+async function mkPptx(qt,ans){
+  await lib("pptxgen.js");var P=new PptxGenJS(),N="Nirmala UI",G="0F7B63";P.layout="LAYOUT_WIDE";P.title="ChemiAI";
+  var s=P.addSlide();s.background={color:G};
+  s.addText("ChemiAI",{x:.7,y:1.1,w:12,h:1,fontFace:N,fontSize:48,bold:true,color:"FFFFFF"});
+  s.addText("তোমার রসায়ন শিক্ষক",{x:.7,y:2.1,w:12,h:.7,fontFace:N,fontSize:26,color:"D3EEE4"});
+  s.addText("প্রশ্ন: "+qt,{x:.7,y:3.4,w:12,h:2.6,fontFace:N,fontSize:24,color:"FFFFFF",valign:"top",fit:"shrink"});
+  var groups=[],cur=null,w=0;
+  parse(ans).forEach(function(b){if(b.k=="b")return;var c=1+Math.floor(b.t.length/75);
+    if(!cur||b.k=="h"||w+c>9){cur={title:b.k=="h"?b.t:(cur?cur.title:"উত্তর"),items:[]};groups.push(cur);w=0}
+    cur.items.push(b);w+=c});
+  groups.forEach(function(g){var sl=P.addSlide();
+    sl.addShape(P.ShapeType.rect,{x:0,y:0,w:13.33,h:1.05,fill:{color:G}});
+    sl.addText(g.title,{x:.5,y:.1,w:12.3,h:.85,fontFace:N,fontSize:26,bold:true,color:"FFFFFF",valign:"middle",fit:"shrink"});
+    var runs=g.items.map(function(b){var e=b.k=="e",o={breakLine:true,fontFace:e?"Cambria Math":N,fontSize:e?24:20,bold:b.k=="s"||e,color:e?"0A5A4A":"1C2B27",paraSpaceAfter:8};
+      if(b.k=="l")o.bullet=true;return{text:b.t,options:o}});
+    sl.addText(runs,{x:.6,y:1.3,w:12.1,h:5.7,valign:"top",fit:"shrink"});
+    sl.addText("ChemiAI · NCTB রসায়ন (নবম–দশম)",{x:.5,y:7.05,w:8,h:.3,fontFace:N,fontSize:11,color:"5D6F69"})});
+  return P.write({outputType:"blob"});
+}
+function tools(box,qt,ans,iu){var d=document.createElement("div");d.className="tools";
+  [["pdf","📄 PDF"],["docx","📝 DOCX"],["pptx","📊 PPTX"],["copy","📋 কপি"]].forEach(function(x){var b=document.createElement("button");b.type="button";b.textContent=x[1];
+    b.setAttribute("aria-label",x[0]=="copy"?"উত্তর কপি করো":x[0].toUpperCase()+" ফাইল ডাউনলোড করো");b.onclick=function(){exportIt(x[0],b,qt,ans,iu)};d.appendChild(b)});
+  box.appendChild(d)}
+async function exportIt(f,b,qt,ans,iu){var o=b.textContent;b.disabled=true;
+  try{
+    if(f=="copy"){try{await navigator.clipboard.writeText(ans)}catch(e){var t=document.createElement("textarea");t.value=ans;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove()}b.textContent="✅ কপি হয়েছে";setTimeout(function(){b.textContent=o;b.disabled=false},1500);return}
+    b.textContent="⏳ তৈরি হচ্ছে…";
+    save(await(f=="pdf"?mkPdf:f=="docx"?mkDocx:mkPptx)(qt,ans,iu),"ChemiAI-"+stamp()+"."+f);
+  }catch(e){alert("ফাইল তৈরি করা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করো।")}
+  if(f!="copy"){b.textContent=o;b.disabled=false}}
+/* ---- text size ---- */
+var fsz=1;try{fsz=parseFloat(localStorage.getItem("chemiai-fs"))||1}catch(e){}
+function setFs(v){fsz=Math.max(.9,Math.min(1.5,Math.round(v*10)/10));document.documentElement.style.setProperty("--fs",fsz);try{localStorage.setItem("chemiai-fs",fsz)}catch(e){}}
+setFs(fsz);document.getElementById("fsm").onclick=function(){setFs(fsz-.1)};document.getElementById("fsp").onclick=function(){setFs(fsz+.1)};
 </script>
 </body>
 </html>
