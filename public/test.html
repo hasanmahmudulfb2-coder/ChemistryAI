@@ -101,6 +101,7 @@ button.card{cursor:pointer}button.card:hover{border-color:var(--brand);box-shado
 .sc{font-size:2.4rem;font-weight:700;color:var(--brand)}
 .rv{margin:12px 0;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
 .mode{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.mode .btn{margin:6px 8px 0 0}
+.chip2{border:1px solid var(--brand);background:var(--bub);color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;font-size:.9rem;cursor:pointer;min-height:40px}
 </style>
 </head>
 <body>
@@ -317,11 +318,25 @@ var app=document.getElementById("app"),st={},mode="bank";document.body.classList
 function esc(s){return String(s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
 function put(x){app.innerHTML=x;app.scrollTop=0;window.scrollTo(0,0)}
-function home(){put('<a class="lnk" href="./">← প্রশ্ন করো</a><h2 style="margin:14px 0 4px">📝 অধ্যায়ভিত্তিক MCQ টেস্ট</h2><div style="color:var(--mute)">অধ্যায় বেছে নাও। প্রতিটি উত্তরের পরেই সঠিক উত্তর ও ব্যাখ্যা দেখতে পাবে।</div><div class="mode" role="group" aria-label="মোড"><button class="btn'+(mode=="bank"?"":" alt")+'" id="mb">📚 বইয়ের প্রশ্ন</button><button class="btn'+(mode=="ai"?"":" alt")+'" id="ma">🤖 AI নতুন প্রশ্ন</button></div>'+(mode=="ai"?'<div class="exp">প্রতিবার AI পাঠ্যবইয়ের নোট থেকে ৫টি নতুন প্রশ্ন বানায়। AI ভুল করতে পারে, তাই উত্তর বইয়ের সাথে মিলিয়ে নিও। (প্রতিদিন সীমিত সংখ্যক বার)</div>':"")+'<div class="grid">'+
-  CH.map(function(c){var b=BANK[c[0]];return b?'<button class="card" data-c="'+c[0]+'"><b>অধ্যায় '+c[0]+'</b><span>'+esc(c[2])+'</span><small>'+(mode=="ai"?"৫টি নতুন AI প্রশ্ন":b.length+"টি প্রশ্ন")+'</small></button>':'<div class="card off"><b>অধ্যায় '+c[0]+'</b><span>'+esc(c[2])+'</span><small>শীঘ্রই আসছে</small></div>'}).join("")+'</div>');
-  document.getElementById("mb").onclick=function(){mode="bank";home()};document.getElementById("ma").onclick=function(){mode="ai";home()};
+var HK="chemiai-history";
+function hget(){try{return JSON.parse(localStorage.getItem(HK))||[]}catch(e){return[]}}
+function hadd(r){try{var h=hget();h.push(r);localStorage.setItem(HK,JSON.stringify(h.slice(-200)))}catch(e){}}
+function stats(){var s={};hget().forEach(function(r){var o=s[r.c]||(s[r.c]={n:0,sum:0,best:0,last:0}),p=Math.round(r.k/r.n*100);o.n++;o.sum+=p;o.best=Math.max(o.best,p);o.last=p});return s}
+function cname(c){for(var i=0;i<CH.length;i++)if(CH[i][0]==c)return CH[i][2];return""}
+function prog(){var s=stats(),k=Object.keys(s);if(!k.length)return"";
+  var tot=0,sum=0;k.forEach(function(c){tot+=s[c].n;sum+=s[c].sum});
+  var weak=k.filter(function(c){return s[c].sum/s[c].n<60}).sort(function(a,b){return s[a].sum/s[a].n-s[b].sum/s[b].n});
+  return '<div class="panel" style="margin-top:14px"><b>📈 আমার অগ্রগতি</b><div style="margin:6px 0">মোট টেস্ট: '+tot+'টি · গড় নম্বর: '+Math.round(sum/tot)+'% · অধ্যায় চেষ্টা করেছ: '+k.length+'/12</div>'+
+   (weak.length?'<div style="margin-top:6px"><b>⚠️ আরও অনুশীলন দরকার</b> (গড় ৬০% এর কম)<div class="mode">'+weak.map(function(c){return'<button class="chip2" data-w="'+c+'">অধ্যায় '+c+': '+esc(cname(c))+' ('+Math.round(s[c].sum/s[c].n)+'%)</button>'}).join("")+'</div></div>':'<div class="exp" style="margin-top:8px">দারুণ! কোনো অধ্যায়ে গড় ৬০% এর নিচে নেই। 🌟</div>')+
+   '<button class="chip2" id="clr" style="margin-top:10px">🗑️ ইতিহাস মুছে ফেলো</button></div>'}
+function sm(c){var o=stats()[c];return o?'<small style="color:var(--brand)">শেষবার '+o.last+'% · সর্বোচ্চ '+o.best+'%</small>':""}
+function home(){put('<a class="lnk" href="./">← প্রশ্ন করো</a><h2 style="margin:14px 0 4px">📝 অধ্যায়ভিত্তিক MCQ টেস্ট</h2><div style="color:var(--mute)">অধ্যায় বেছে নাও। প্রতিটি উত্তরের পরেই সঠিক উত্তর ও ব্যাখ্যা দেখতে পাবে।</div><div class="mode" role="group" aria-label="মোড"><button class="btn'+(mode=="bank"?"":" alt")+'" id="mb">📚 বইয়ের প্রশ্ন</button><button class="btn'+(mode=="ai"?"":" alt")+'" id="ma">🤖 AI নতুন প্রশ্ন</button></div>'+(mode=="ai"?'<div class="exp">প্রতিবার AI পাঠ্যবইয়ের নোট থেকে ৫টি নতুন প্রশ্ন বানায়। AI ভুল করতে পারে, তাই উত্তর বইয়ের সাথে মিলিয়ে নিও। (প্রতিদিন সীমিত সংখ্যক বার)</div>':"")+prog()+'<div class="grid">'+
+  CH.map(function(c){var b=BANK[c[0]];return b?'<button class="card" data-c="'+c[0]+'"><b>অধ্যায় '+c[0]+'</b><span>'+esc(c[2])+'</span><small>'+(mode=="ai"?"৫টি নতুন AI প্রশ্ন":b.length+"টি প্রশ্ন")+'</small>'+sm(c[0])+'</button>':'<div class="card off"><b>অধ্যায় '+c[0]+'</b><span>'+esc(c[2])+'</span><small>শীঘ্রই আসছে</small></div>'}).join("")+'</div>');
+  document.getElementById("mb").onclick=function(){mode="bank";home()};
+  [].forEach.call(app.querySelectorAll("[data-w]"),function(b){b.onclick=function(){var c=b.getAttribute("data-w");if(mode=="ai")startAI(c);else start(c,BANK[c])}});
+  var cl=document.getElementById("clr");if(cl)cl.onclick=function(){if(confirm("সব ফলাফলের ইতিহাস মুছে ফেলবে?")){try{localStorage.removeItem(HK)}catch(e){}home()}};document.getElementById("ma").onclick=function(){mode="ai";home()};
   [].forEach.call(app.querySelectorAll("button.card"),function(b){b.onclick=function(){var c=b.getAttribute("data-c");if(mode=="ai")startAI(c);else start(c,BANK[c])}})}
-function start(ch,src,ai){st={ai:!!ai,ch:ch,i:0,ok:0,bad:[],qs:shuf(src).map(function(q){var p=shuf([0,1,2,3]);return{q:q[0],o:p.map(function(i){return q[1][i]}),a:p.indexOf(q[2]),e:q[3],raw:q}})};show()}
+function start(ch,src,ai,sub){st={sub:!!sub,ai:!!ai,ch:ch,i:0,ok:0,bad:[],qs:shuf(src).map(function(q){var p=shuf([0,1,2,3]);return{q:q[0],o:p.map(function(i){return q[1][i]}),a:p.indexOf(q[2]),e:q[3],raw:q}})};show()}
 function show(){var q=st.qs[st.i],n=st.qs.length;
   put('<div class="panel"><div style="display:flex;justify-content:space-between;color:var(--mute)"><span>অধ্যায় '+st.ch+(st.ai?' · 🤖 AI-নির্মিত':'')+'</span><span>প্রশ্ন '+(st.i+1)+' / '+n+'</span></div><div class="pb"><i style="width:'+(st.i/n*100)+'%"></i></div><div class="qt">'+esc(q.q)+'</div><div id="ops">'+
   q.o.map(function(o,i){return'<button class="op" data-i="'+i+'">'+esc(o)+'</button>'}).join("")+'</div><div id="fb" role="status" aria-live="polite"></div></div>');
@@ -331,12 +346,12 @@ function pick(i){var q=st.qs[st.i],ok=i==q.a;if(ok)st.ok++;else st.bad.push(q.ra
   var last=st.i==st.qs.length-1;
   document.getElementById("fb").innerHTML='<div class="exp"><b>'+(ok?"✅ সঠিক!":"❌ ভুল। সঠিক উত্তর: "+["ক","খ","গ","ঘ"][q.a])+'</b><br>'+esc(q.e)+'</div><button class="btn" id="nx">'+(last?"ফলাফল দেখো":"পরবর্তী প্রশ্ন →")+'</button>';
   var nx=document.getElementById("nx");nx.onclick=function(){if(last)result();else{st.i++;show()}};nx.focus()}
-function result(){var n=st.qs.length,p=Math.round(st.ok/n*100),m=p>=80?"চমৎকার! 🎉":p>=50?"ভালো হয়েছে, আরেকটু অনুশীলন করো। 💪":"চিন্তা নেই, ব্যাখ্যাগুলো পড়ে আবার চেষ্টা করো। 📖";
+function result(){var n=st.qs.length;if(!st.sub)hadd({c:st.ch,k:st.ok,n:n,a:st.ai?1:0,t:Date.now()});var p=Math.round(st.ok/n*100),m=p>=80?"চমৎকার! 🎉":p>=50?"ভালো হয়েছে, আরেকটু অনুশীলন করো। 💪":"চিন্তা নেই, ব্যাখ্যাগুলো পড়ে আবার চেষ্টা করো। 📖";
   put('<div class="panel"><div>অধ্যায় '+st.ch+' এর ফলাফল</div><div class="sc">'+st.ok+' / '+n+' ('+p+'%)</div><div style="margin:6px 0 10px">'+m+'</div>'+
   (st.bad.length?'<h3>যে প্রশ্নগুলো ভুল হয়েছে</h3>'+st.bad.map(function(q){return'<div class="rv"><b>'+esc(q[0])+'</b><br>✅ সঠিক: '+esc(q[1][q[2]])+'<br><span style="color:var(--mute)">'+esc(q[3])+'</span></div>'}).join(""):'<div class="exp">সবগুলো সঠিক! 🌟</div>')+
   '<button class="btn" id="again">আবার টেস্ট দাও</button>'+(st.bad.length?'<button class="btn alt" id="wr">ভুলগুলো আবার</button>':'')+'<button class="btn alt" id="hm">অন্য অধ্যায়</button></div>');
   var c=st.ch,bad=st.bad;var ai=st.ai;document.getElementById("again").onclick=function(){if(ai)startAI(c);else start(c,BANK[c])};document.getElementById("hm").onclick=home;
-  if(bad.length)document.getElementById("wr").onclick=function(){start(c,bad,ai)}}
+  if(bad.length)document.getElementById("wr").onclick=function(){start(c,bad,ai,true)}}
 async function startAI(c){
   put('<div class="panel"><div class="qt" role="status">🤖 নতুন প্রশ্ন তৈরি হচ্ছে… একটু অপেক্ষা করো।</div></div>');
   try{
