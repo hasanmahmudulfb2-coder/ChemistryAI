@@ -4,15 +4,12 @@
 // FREE version: uses Google Gemini's free tier (key from Google AI Studio, no card).
 // Set GEMINI_MODEL to a model that shows "Free of charge" on Google's pricing page.
 const NOTES = require("./notes");
+const { limit, MSG } = require("./_lib");
 const MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
 const MAX_OUTPUT_TOKENS = 2000;       // cap per answer
 const MAX_MESSAGES = 8;               // history sent per request
 const MAX_CHARS = 1200;
 const MAX_IMAGE_B64 = 1500000;        // ~1.1 MB image after compression               // max length of one message
-const PER_IP_PER_MINUTE = 4;
-const PER_IP_PER_DAY = 20;
-// Keep this at or below your free daily quota (see aistudio.google.com/rate-limit)
-const GLOBAL_PER_DAY = Number(process.env.GLOBAL_DAILY_LIMIT || 300);
 
 const CHAPTERS = [
   ["১","Concepts of Chemistry","রসায়নের ধারণা","1-16"],
@@ -48,12 +45,18 @@ const SYSTEM = `তুমি বাংলাদেশের একজন অভ�
 NCTB রসায়ন (নবম–দশম, ২০২৬ সংস্করণ) অধ্যায়সমূহ:
 ${CHAPTERS.map(c => `${c[0]}. ${c[1]} (${c[2]}) পৃষ্ঠা ${c[3]}`).join("\n")}`;
 
-// ---- simple in-memory rate limiting (resets on cold start; see README for Upstash upgrade)
-const hits = globalThis.__hits || (globalThis.__hits = new Map());
-const daily = globalThis.__daily || (globalThis.__daily = { day: "", n: 0 });
-
 // Keywords that suggest a chapter when the student did not pick one.
 const KEYWORDS = {
+  "১": /scientific method|research step|গবেষণা|alchemy|আলকেমি|jabir|জাবির|lab safety|safety sign|hazard|ল্যাবরেটরির নিরাপত্তা|branches of chemistry/i,
+  "৮": /electrolysis|তড়িৎ বিশ্লেষণ|electrolytic|galvanic|daniell|ড্যানিয়েল|electroplat|তড়িৎ প্রলেপ|salt bridge|dry cell|bond energy|বন্ধন শক্তি|nuclear|fission|fusion|ফিশন|ফিউশন|greenhouse|global warming|কোষ|anode|cathode|অ্যানোড|ক্যাথোড/i,
+  "১০": /\bore\b|আকরিক|extraction|নিষ্কাশন|alloy|সংকর|corrosion|rust|মরিচা|galvaniz|sulfuric acid|sulphuric|সালফিউরিক|contact process|frasch|froth|roasting|calcination|cryolite|blast furnace|bauxite|mineral/i,
+  "১১": /hydrocarbon|হাইড্রোকার্বন|alkane|alkene|alkyne|অ্যালকেন|অ্যালকিন|অ্যালকাইন|petroleum|পেট্রোলিয়াম|fractional|natural gas|polymer|পলিমার|plastic|প্লাস্টিক|ethanol|ইথানল|ethanoic|formalin|ফরমালিন|aldehyde|alcohol|homologous|organic/i,
+  "১২": /baking soda|baking powder|বেকিং|soap|সাবান|detergent|ডিটারজেন্ট|bleaching|ব্লিচিং|saponification|urea|ইউরিয়া|toilet cleaner|glass cleaner|washing soda|haber|হেবার|preservative|সংরক্ষক|vinegar|ভিনেগার/i,
+  "২": /diffusion|ব্যাপন|effusion|sublimat|ঊর্ধ্বপাতন|distillation|পাতন|melting point|গলনাঙ্ক|boiling point|স্ফুটনাঙ্ক|kinetic theory|states of matter|পদার্থের অবস্থা/i,
+  "৩": /atomic number|পারমাণবিক সংখ্যা|mass number|ভর সংখ্যা|isotope|আইসোটোপ|rutherford|রাদারফোর্ড|bohr|বোর মডেল|electron configuration|ইলেকট্রন বিন্যাস|proton|neutron|প্রোটন|নিউট্রন|শক্তিস্তর|sublevel|aufbau|relative atomic mass/i,
+  "৯": /\bacids?\b|অ্যাসিড|এসিড|\bbases?\b|ক্ষারক|alkali|\bph\b|পিএইচ|litmus|লিটমাস|acid rain|অম্লবৃষ্টি|hard water|খর পানি|খরতা|water pollution|পানি দূষণ|\bBOD\b|\bCOD\b/i,
+  "৪": /periodic|পর্যায় সারণি|mendeleev|মেন্ডেলিভ|moseley|ionization|আয়নীকরণ|electronegativ|তড়িৎ ঋণাত্মকতা|atomic radius|ব্যাসার্ধ|alkali|ক্ষার ধাতু|halogen|হ্যালোজেন|inert|নিষ্ক্রিয়|transition|electron affinity|ইলেকট্রন আসক্তি|lanthanide|metalloid|সাবমেটাল/i,
+  "৫": /chemical bond|রাসায়নিক বন্ধন|ionic|আয়নিক|covalent|সমযোজী|metallic bond|ধাতব বন্ধন|valenc|যোজনী|যোজ্যতা|octet|অষ্টক|duet|radical|মূলক|cation|anion|কেটায়ন|অ্যানায়ন|polar|পোলার|van der waals|delocali/i,
   "৬": /mole|মোল|molar|মোলার|molarity|empirical|molecular formula|balanc|সমতা|limiting|yield|stoichio|avogadro|অ্যাভোগ্যাড্রো|percent composition|শতকরা/i,
   "৭": /oxidation|redox|জারণ|বিজারণ|oxidant|reductant|exothermic|endothermic|তাপহারী|তাপউৎপাদী|le chatelier|equilibrium|সাম্যাবস্থা|neutraliz|প্রশমন|precipitat|অধঃক্ষেপ|rate of reaction|reversible|rust|মরিচা|isomeri|polymeri|hydrolysis|hydration/i,
 };
@@ -63,20 +66,6 @@ function notesFor(chapter, text) {
   let keys = NOTES[chapter] ? [chapter] : Object.keys(KEYWORDS).filter(k => NOTES[k] && KEYWORDS[k].test(text || "")).slice(0, 2);
   if (!keys.length) return "";
   return "\n\n--- পাঠ্যবইয়ের নোট (শুধু প্রাসঙ্গিক হলে ব্যবহার করো; বইয়ের পদ্ধতি, পারমাণবিক ভর ও পৃষ্ঠা নম্বর অনুসরণ করো) ---\n" + keys.map(k => NOTES[k]).join("\n\n");
-}
-
-function limited(ip) {
-  const now = Date.now();
-  const day = new Date().toISOString().slice(0, 10);
-  if (daily.day !== day) { daily.day = day; daily.n = 0; hits.clear(); }
-  if (daily.n >= GLOBAL_PER_DAY) return "global";
-  const h = hits.get(ip) || { times: [], today: 0 };
-  h.times = h.times.filter(t => now - t < 60000);
-  if (h.times.length >= PER_IP_PER_MINUTE) return "minute";
-  if (h.today >= PER_IP_PER_DAY) return "day";
-  h.times.push(now); h.today++; daily.n++;
-  hits.set(ip, h);
-  return null;
 }
 
 function clean(messages, chapter) {
@@ -101,13 +90,11 @@ module.exports = async function handler(req, res) {
   if (!process.env.GEMINI_API_KEY) { res.statusCode = 500; return res.end("Server not configured"); }
 
   const ip = (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || req.socket.remoteAddress || "unknown";
-  const why = limited(ip);
+  const why = await limit(ip, "chat");
   if (why) {
     res.statusCode = 429;
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
-    return res.end(why === "global"
-      ? "আজকের মতো সেবা সীমা শেষ। কাল আবার চেষ্টা করো।"
-      : "তুমি অনেক দ্রুত প্রশ্ন করছ। একটু অপেক্ষা করে আবার চেষ্টা করো।");
+    return res.end(MSG[why]);
   }
 
   let body = req.body;
