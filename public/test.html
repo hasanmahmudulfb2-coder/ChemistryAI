@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<title>MCQ টেস্ট – ChemiAI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#f6f8f7;--h1:#eaf7f2;--h2:#d3eee4;--glass:rgba(255,255,255,.7);--card:#fff;--ink:#1c2b27;--mute:#5d6f69;--brand:#0f7b63;--brand-ink:#fff;--bub:#e3f3ee;--line:#d8e2de;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111a17;--h1:#17372f;--h2:#0f2520;--glass:rgba(255,255,255,.14);--card:#1a2622;--ink:#e6efec;--mute:#93a8a1;--brand:#2fb894;--brand-ink:#08201a;--bub:#1f3a33;--line:#2c3d37;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111a17;--h1:#17372f;--h2:#0f2520;--glass:rgba(255,255,255,.14);--card:#1a2622;--ink:#e6efec;--mute:#93a8a1;--brand:#2fb894;--brand-ink:#08201a;--bub:#1f3a33;--line:#2c3d37;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans Bengali","Kalpurush","Siyam Rupali",system-ui,sans-serif;display:flex;flex-direction:column;line-height:1.7}
+.hero{position:relative;overflow:hidden;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 16px;background:linear-gradient(120deg,var(--h1),var(--h2));border-bottom:1px solid var(--line)}
+.hero .art{position:absolute;top:0;height:100%;width:auto;pointer-events:none}
+.hero .hl{left:0}.hero .hr{right:0}
+.hero .t{position:relative;z-index:1}
+.hero h1{margin:0;font-size:clamp(1.5rem,4.2vw,2.2rem);line-height:1.25;color:var(--ink);letter-spacing:.2px}
+.hero h1 b{color:var(--brand)}
+.hero p{margin:6px 0 0;font-size:.95rem;color:var(--mute)}
+.hero .tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.hero .tags span{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:999px;font-size:.8rem;padding:3px 12px}
+@media (max-width:899px){.hero .art{opacity:.13}.hero{min-height:150px}}
+.g{fill:var(--glass);stroke-width:2.5}
+#chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;max-width:760px;width:100%;margin:0 auto}
+.msg{padding:10px 14px;border-radius:14px;max-width:92%;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere}
+.u{align-self:flex-end;background:var(--brand);color:var(--brand-ink)}
+.a{align-self:flex-start;background:var(--card);border:1px solid var(--line)}
+.hint{color:var(--mute);font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--bub);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:.88rem;cursor:pointer}
+.bar{border-top:1px solid var(--line);background:var(--card);padding:10px 12px}
+.row{display:flex;gap:8px;max-width:760px;margin:0 auto}
+.sel{max-width:760px;margin:0 auto 8px;display:flex;gap:8px}
+select{flex:1;font:inherit;font-size:.88rem;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0}
+textarea{flex:1;font:inherit;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:none;min-height:46px;max-height:140px}
+button.send{border:0;border-radius:12px;background:var(--brand);color:var(--brand-ink);font:inherit;font-weight:700;padding:0 18px;cursor:pointer}
+button:disabled{opacity:.5}
+.pv{max-width:760px;margin:0 auto 8px;display:none;align-items:center;gap:8px}
+.pv img{height:56px;border-radius:8px;border:1px solid var(--line)}
+.pv button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;font:inherit;padding:2px 10px;cursor:pointer}
+.note{max-width:760px;margin:6px auto 0;color:var(--mute);font-size:.78rem;text-align:center}
+.cam{border:1px solid var(--line);background:var(--bg);border-radius:12px;font-size:1.3rem;padding:0 12px;cursor:pointer}
+.msg img{display:block;max-width:180px;max-height:180px;border-radius:8px;margin-bottom:6px}
+
+@font-face{font-family:"NSB";src:url(vendor/nsb400.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0980-09FF,U+200C-200D,U+0964-0965}
+@font-face{font-family:"NSB";src:url(vendor/nsb700.woff2) format("woff2");font-weight:700;font-display:swap;unicode-range:U+0980-09FF,U+200C-200D,U+0964-0965}
+:root{--fs:1}
+body,button,textarea,select{font-family:"NSB",system-ui,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+header,main,.bar{position:relative;z-index:1}
+.bgart{position:fixed;inset:0;width:100%;height:100%;z-index:0;color:var(--brand);opacity:.085;pointer-events:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .bgart{opacity:.13}}
+a:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+#chat{max-width:1100px;padding:16px clamp(10px,3vw,28px);gap:14px}
+.msg{font-size:calc(1rem*var(--fs))}
+.msg.u{max-width:80%}
+.msg.a{width:100%;max-width:100%;padding:18px clamp(14px,2.5vw,28px);white-space:normal;font-size:calc(1.05rem*var(--fs));line-height:1.9;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.msg.a.hint{width:auto}
+.msg.a>div.h{font-weight:700;color:var(--brand);margin-top:1em;font-size:1.06em}
+.msg.a>div.s{font-weight:700;margin-top:.7em}
+.msg.a>div.e{margin:.35em 0;padding:8px 14px;background:var(--bub);border-left:4px solid var(--brand);border-radius:8px;font-family:"Cambria Math","STIX Two Math","Noto Sans Math","NSB",system-ui,serif;font-size:1.12em;overflow-x:auto;white-space:nowrap}
+.msg.a>div.l{padding-left:1.4em;position:relative}
+.msg.a>div.l::before{content:"•";position:absolute;left:.35em;color:var(--brand);font-weight:700}
+.msg.a>div.bk{height:.5em}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.tools button{min-height:44px;border:1px solid var(--brand);background:var(--bub);color:var(--ink);border-radius:10px;padding:0 14px;font:inherit;font-size:.9rem;cursor:pointer}
+.tools button:hover:not(:disabled){background:var(--brand);color:var(--brand-ink)}
+.row,.sel,.note,.pv{max-width:1100px}
+textarea{min-height:52px;font-size:calc(1rem*var(--fs))}
+button.send,.cam{min-height:52px}
+.fs{display:flex;gap:6px}.fs button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;font:inherit;min-width:44px;min-height:36px;cursor:pointer}
+.sel{display:flex;gap:8px;align-items:center}
+body.chatting .hero{min-height:0;padding:8px 16px}
+body.chatting .hero .art,body.chatting .hero p,body.chatting .hero .tags{display:none}
+body.chatting .hero h1{font-size:1.15rem}
+.lnk{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border:1px solid var(--brand);border-radius:10px;color:var(--brand);background:var(--bub);text-decoration:none;font-size:.9rem;white-space:nowrap}
+.sheet{--ink:#1c2b27;--bub:#e3f3ee;--brand:#0f7b63;--line:#d8e2de;--mute:#5d6f69;position:absolute;left:-10000px;top:0;width:794px;padding:36px 44px;background:#fff;color:#1c2b27;font-size:16px;line-height:1.85;box-sizing:border-box}
+.sheet .sh-h{font-size:22px;color:#0f7b63;border-bottom:3px solid #0f7b63;padding-bottom:8px;margin-bottom:12px}
+.sheet .sh-q{font-weight:700;margin-bottom:8px}.sheet img{max-width:260px;display:block;margin:8px 0}
+.sheet .h{font-weight:700;color:#0f7b63;margin-top:12px}.sheet .s{font-weight:700;margin-top:6px}
+.sheet .e{margin:4px 0;padding:6px 12px;background:#e3f3ee;border-left:4px solid #0f7b63;border-radius:6px;font-family:"Cambria Math","STIX Two Math","Noto Sans Math","NSB",serif;font-size:18px}
+.sheet .l{padding-left:22px;position:relative}.sheet .l::before{content:"•";position:absolute;left:6px;color:#0f7b63;font-weight:700}.sheet .bk{height:8px}
+.sheet .sh-f{margin-top:16px;padding-top:8px;border-top:1px solid #d8e2de;font-size:12px;color:#5d6f69}
+@media print{.bgart,.bar,.hero{display:none}}
+
+#app{flex:1;overflow-y:auto;max-width:920px;width:100%;margin:0 auto;padding:18px clamp(12px,3vw,24px) 40px;position:relative;z-index:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;font:inherit;color:var(--ink);display:flex;flex-direction:column;gap:4px;min-height:98px}
+button.card{cursor:pointer}button.card:hover{border-color:var(--brand);box-shadow:0 2px 10px rgba(15,123,99,.18)}
+.card.off{opacity:.55}.card small{color:var(--mute)}.card b{color:var(--brand)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:clamp(14px,3vw,26px);box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.pb{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0 16px}.pb i{display:block;height:100%;background:var(--brand);transition:width .3s}
+.qt{font-size:1.2rem;line-height:1.8;font-weight:700;margin:6px 0 14px}
+.op{display:block;width:100%;text-align:left;min-height:50px;margin:8px 0;padding:10px 14px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;font-size:1.05rem;cursor:pointer}
+.op:hover:not(:disabled){border-color:var(--brand)}.op:disabled{cursor:default;color:var(--ink);opacity:1}
+.op.ok{border-color:#1a9a62;background:rgba(26,154,98,.16)}.op.no{border-color:#d9534f;background:rgba(217,83,79,.16)}
+.exp{margin-top:12px;padding:12px 14px;background:var(--bub);border-left:4px solid var(--brand);border-radius:8px;line-height:1.8}
+.btn{min-height:48px;padding:0 20px;border:0;border-radius:12px;background:var(--brand);color:var(--brand-ink);font:inherit;font-weight:700;cursor:pointer;margin:10px 8px 0 0}
+.btn.alt{background:var(--bub);color:var(--ink);border:1px solid var(--brand)}
+.sc{font-size:2.4rem;font-weight:700;color:var(--brand)}
+.rv{margin:12px 0;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.mode{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.mode .btn{margin:6px 8px 0 0}
+</style>
+</head>
+<body>
+<svg class="bgart" aria-hidden="true" focusable="false"><defs><pattern id="chem" width="320" height="270" patternUnits="userSpaceOnUse"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<g transform="translate(62 58)"><ellipse rx="30" ry="11"/><ellipse rx="30" ry="11" transform="rotate(60)"/><ellipse rx="30" ry="11" transform="rotate(120)"/><circle r="4" fill="currentColor"/></g>
+<polygon points="212,26 234,39 234,65 212,78 190,65 190,39"/><circle cx="212" cy="52" r="12"/>
+<path d="M270 150v24l-15 30h46l-15-30v-24M264 150h18"/><path d="M60 170v46a8 8 0 0 0 16 0v-46zM92 180v36a8 8 0 0 0 16 0v-36z"/>
+<g transform="translate(150 150)"><path d="M0 0L26 -14M0 0L24 18M0 0L-26 10"/><circle r="6" fill="currentColor"/><circle cx="26" cy="-14" r="5"/><circle cx="24" cy="18" r="5"/><circle cx="-26" cy="10" r="5"/></g></g>
+<g fill="currentColor" font-family="system-ui,sans-serif" font-weight="700"><text x="110" y="112" font-size="24" transform="rotate(-10 110 112)">H₂O</text><text x="270" y="70" font-size="26">Na</text><text x="14" y="130" font-size="24">Cl</text><text x="170" y="236" font-size="22">CO₂</text><text x="116" y="42" font-size="20">pH</text><text x="22" y="256" font-size="22">Fe</text><text x="250" y="250" font-size="22">O₂</text></g></pattern></defs><rect width="100%" height="100%" fill="url(#chem)"/></svg>
+<header class="hero">
+<svg class="art hl" viewBox="0 0 420 200" preserveAspectRatio="xMinYMid meet" aria-hidden="true">
+  <line x1="10" y1="166" x2="410" y2="166" stroke="#3d5a54" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#43b89c" fill-opacity=".5"><circle cx="30" cy="30" r="5"/><circle cx="196" cy="26" r="4"/><circle cx="300" cy="150" r="4"/><circle cx="400" cy="120" r="5"/><circle cx="14" cy="96" r="3"/></g>
+  <!-- Erlenmeyer flask -->
+  <path class="g" stroke="#3b82c4" d="M50 36V84L22 150Q18 162 32 162H88Q102 162 98 150L70 84V36Z"/>
+  <path d="M33 118H87L98 150Q102 162 88 162H32Q18 162 22 150Z" fill="#3b82c4" fill-opacity=".85"/>
+  <rect x="45" y="29" width="30" height="8" rx="4" fill="#3b82c4"/>
+  <circle cx="52" cy="136" r="4" fill="#fff" fill-opacity=".7"/><circle cx="68" cy="128" r="3" fill="#fff" fill-opacity=".7"/>
+  <!-- Beaker -->
+  <path class="g" stroke="#f4a62a" d="M120 62V150Q120 162 132 162H168Q180 162 180 150V62Z"/>
+  <path d="M120 104H180V150Q180 162 168 162H132Q120 162 120 150Z" fill="#f4a62a" fill-opacity=".85"/>
+  <path d="M115 58H185" stroke="#f4a62a" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#3d5a54" stroke-opacity=".55" stroke-width="2.5" stroke-linecap="round"><path d="M120 78H134"/><path d="M120 91H128"/><path d="M120 117H134"/><path d="M120 130H128"/></g>
+  <circle cx="150" cy="140" r="4" fill="#fff" fill-opacity=".75"/><circle cx="164" cy="125" r="3" fill="#fff" fill-opacity=".75"/>
+  <!-- Test tubes -->
+  <g stroke-width="2.5">
+   <path class="g" stroke="#ef6a5b" d="M214 66H232V138A9 9 0 0 1 214 138Z"/><path d="M214 108H232V138A9 9 0 0 1 214 138Z" fill="#ef6a5b" fill-opacity=".85"/>
+   <path class="g" stroke="#0f7b63" d="M240 52H258V138A9 9 0 0 1 240 138Z"/><path d="M240 96H258V138A9 9 0 0 1 240 138Z" fill="#0f7b63" fill-opacity=".85"/>
+   <path class="g" stroke="#7c5cc4" d="M266 74H284V138A9 9 0 0 1 266 138Z"/><path d="M266 118H284V138A9 9 0 0 1 266 138Z" fill="#7c5cc4" fill-opacity=".85"/>
+  </g>
+  <rect x="206" y="128" width="86" height="9" rx="4.5" fill="#3d5a54"/>
+  <rect x="214" y="136" width="8" height="30" rx="3" fill="#3d5a54"/><rect x="276" y="136" width="8" height="30" rx="3" fill="#3d5a54"/>
+  <!-- Atom -->
+  <g transform="translate(352 70)" fill="none" stroke="#7c5cc4" stroke-width="2.5">
+   <ellipse rx="36" ry="13"/><ellipse rx="36" ry="13" transform="rotate(60)"/><ellipse rx="36" ry="13" transform="rotate(120)"/>
+   <circle r="8" fill="#ef6a5b" stroke="none"/>
+   <circle cx="36" cy="0" r="5" fill="#f4a62a" stroke="none"/><circle cx="-18" cy="31" r="5" fill="#43b89c" stroke="none"/><circle cx="-18" cy="-31" r="5" fill="#3b82c4" stroke="none"/>
+  </g>
+</svg>
+<svg class="art hr" viewBox="0 0 420 200" preserveAspectRatio="xMaxYMid meet" aria-hidden="true">
+  <line x1="10" y1="166" x2="410" y2="166" stroke="#3d5a54" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#43b89c" fill-opacity=".5"><circle cx="20" cy="24" r="4"/><circle cx="210" cy="20" r="5"/><circle cx="318" cy="120" r="4"/><circle cx="196" cy="150" r="3"/><circle cx="404" cy="40" r="4"/></g>
+  <!-- Periodic table fragment -->
+  <g font-family="system-ui,sans-serif" font-weight="700" text-anchor="middle">
+   <g fill="#43b89c"><rect x="24" y="30" width="38" height="38" rx="7"/></g><g fill="#ef6a5b"><rect x="66" y="30" width="38" height="38" rx="7"/><rect x="108" y="30" width="38" height="38" rx="7"/><rect x="150" y="30" width="38" height="38" rx="7"/></g>
+   <g fill="#3b82c4"><rect x="24" y="72" width="38" height="38" rx="7"/></g><g fill="#43b89c"><rect x="66" y="72" width="38" height="38" rx="7"/></g><g fill="#ef6a5b"><rect x="108" y="72" width="38" height="38" rx="7"/><rect x="150" y="72" width="38" height="38" rx="7"/></g>
+   <g fill="#3b82c4"><rect x="24" y="114" width="38" height="38" rx="7"/></g><g fill="#43b89c"><rect x="66" y="114" width="38" height="38" rx="7"/></g><g fill="#f4a62a"><rect x="108" y="114" width="38" height="38" rx="7"/></g><g fill="#ef6a5b"><rect x="150" y="114" width="38" height="38" rx="7"/></g>
+   <g fill="#fff" font-size="15"><text x="43" y="55">B</text><text x="85" y="55">C</text><text x="127" y="55">N</text><text x="169" y="55">O</text><text x="43" y="97">Al</text><text x="85" y="97">Si</text><text x="127" y="97">P</text><text x="169" y="97">S</text><text x="43" y="139">Ga</text><text x="85" y="139">Ge</text><text x="127" y="139">As</text><text x="169" y="139">Se</text></g>
+   <g fill="#fff" fill-opacity=".85" font-size="8" font-weight="600"><text x="32" y="41">5</text><text x="74" y="41">6</text><text x="116" y="41">7</text><text x="158" y="41">8</text><text x="32" y="83">13</text><text x="74" y="83">14</text><text x="116" y="83">15</text><text x="158" y="83">16</text></g>
+  </g>
+  <!-- Molecular model -->
+  <g stroke="#8aa39c" stroke-width="6" stroke-linecap="round"><path d="M262 94L232 62"/><path d="M262 94L296 66"/><path d="M262 94L270 140"/><path d="M262 94L226 118"/></g>
+  <circle cx="262" cy="94" r="17" fill="#0f7b63"/><circle cx="256" cy="88" r="5" fill="#fff" fill-opacity=".35"/>
+  <circle cx="232" cy="62" r="11" fill="#ef6a5b"/><circle cx="296" cy="66" r="11" fill="#ef6a5b"/><circle cx="270" cy="140" r="11" fill="#f4a62a"/><circle cx="226" cy="118" r="9" fill="#3b82c4"/>
+  <!-- Bunsen burner -->
+  <path d="M362 92Q342 64 362 28Q382 64 362 92Z" fill="#ef6a5b"/><path d="M362 90Q351 72 362 52Q373 72 362 90Z" fill="#f4a62a"/><path d="M362 88Q357 78 362 68Q367 78 362 88Z" fill="#fff6c8"/>
+  <rect x="355" y="94" width="14" height="62" rx="4" fill="#3d5a54"/><rect x="351" y="112" width="22" height="8" rx="3" fill="#f4a62a"/>
+  <path d="M334 166Q334 152 362 152Q390 152 390 166Z" fill="#3d5a54"/>
+  <path d="M390 160H408" stroke="#3d5a54" stroke-width="5" stroke-linecap="round"/>
+</svg>
+<div class="t"><h1><b>ChemiAI</b> – তোমার রসায়ন শিক্ষক</h1><p>SSC (নবম–দশম) · NCTB পাঠ্যবই অনুসারে</p><div class="tags"><span>📷 ছবি দিয়ে প্রশ্ন</span><span>🧪 ধাপে ধাপে সমাধান</span><span>📖 পাঠ্যবইয়ের সংযোগ</span><a class="lnk" href="test.html">📝 MCQ টেস্ট দাও</a></div></div>
+</header>
+<main id="app" aria-label="MCQ টেস্ট"></main>
+<script>
+var CH=[["১","Concepts of Chemistry","রসায়নের ধারণা","1-16"],["২","States of Matter","পদার্থের অবস্থা","17-34"],["৩","Structure of Matter","পদার্থের গঠন","35-58"],["৪","Periodic Table","পর্যায় সারণি","59-81"],["৫","Chemical Bond","রাসায়নিক বন্ধন","82-108"],["৬","Concept of Mole and Chemical Counting","মোল ধারণা ও রাসায়নিক গণনা","109-141"],["৭","Chemical Reactions","রাসায়নিক বিক্রিয়া","142-167"],["৮","Chemistry and Energy","রসায়ন ও শক্তি","168-205"],["৯","Acid-Base Balance","এসিড-ক্ষার সমতা","206-232"],["১০","Mineral Resources: Metal-Nonmetal","খনিজ সম্পদ: ধাতু-অধাতু","233-260"],["১১","Mineral Resources: Fossils","খনিজ সম্পদ: জীবাশ্ম","261-286"],["১২","Chemistry in Our Lives","আমাদের জীবনে রসায়ন","287-304"]];
+var BANK={"১":[
+["প্রথম ল্যাবরেটরিতে রাসায়নিক পরীক্ষা করেছেন বলে কাকে বলা হয়?",["জাবির ইবনে হাইয়ান","ডেমোক্রিটাস","অ্যারিস্টটল","কণাদ"],0,"আলকেমিস্ট জাবির ইবনে হাইয়ান প্রথম ল্যাবরেটরিতে রাসায়নিক পরীক্ষা করেন। (অনুচ্ছেদ ১.১)"],
+["'Alchemy' শব্দটি কোন ভাষার শব্দ থেকে এসেছে?",["লাতিন","গ্রিক","আরবি (আল-কিমিয়া)","সংস্কৃত"],2,"আরবি 'আল-কিমিয়া' থেকে Alchemy এবং পরে Chemistry শব্দ এসেছে। (অনুচ্ছেদ ১.১)"],
+["ব্রোঞ্জ কোন দুটি ধাতুর সংকর?",["তামা ও টিন","তামা ও দস্তা","লোহা ও কার্বন","সোনা ও রুপা"],0,"তামা ও টিন গলিয়ে মিশিয়ে ব্রোঞ্জ তৈরি হয় (প্রায় ৩৫০০ খ্রিস্টপূর্বাব্দে)। (অনুচ্ছেদ ১.১)"],
+["খ্রিস্টপূর্ব ৩৮০ সালে কোন গ্রিক দার্শনিক পদার্থের অবিভাজ্য ক্ষুদ্র কণাকে 'অ্যাটম' নাম দেন?",["ডেমোক্রিটাস","ডাল্টন","লাভোয়াজিয়ে","বোর"],0,"ডেমোক্রিটাস অবিভাজ্য কণার নাম দেন অ্যাটম; পরীক্ষামূলক ভিত্তি না থাকায় তা গৃহীত হয়নি। (অনুচ্ছেদ ১.১)"],
+["নিচের কোনটি তেজস্ক্রিয় পদার্থ?",["ইউরেনিয়াম","সোডিয়াম","নাইট্রোজেন","কার্বন"],0,"ইউরেনিয়াম ও রেডিয়াম ক্ষতিকর রশ্মি নির্গত করে, তাই এগুলো তেজস্ক্রিয়। (অনুচ্ছেদ ১.৬)"],
+["রসায়নে গবেষণার প্রথম ধাপ কোনটি?",["পরীক্ষা সম্পাদন","বিষয় নির্ধারণ","উপাত্ত বিশ্লেষণ","সিদ্ধান্ত গ্রহণ"],1,"প্রথম ধাপে কী জানতে বা আবিষ্কার করতে চাও তা নির্ধারণ করতে হয়। (অনুচ্ছেদ ১.৫)"],
+["ল্যাবরেটরিতে ব্যবহারযোগ্য অ্যাপ্রন কেমন হবে?",["সাদা, হাঁটু পর্যন্ত লম্বা, হাতা কব্জি পর্যন্ত","লাল, ছোট হাতা","কালো, কোমর পর্যন্ত","যেকোনো রঙের, হাতাবিহীন"],0,"অ্যাপ্রন হবে সাদা, হাঁটু পর্যন্ত লম্বা ও হাতা কব্জি পর্যন্ত। (অনুচ্ছেদ ১.৬)"],
+["NH₄Cl পানিতে দ্রবীভূত হলে পানির তাপমাত্রার কী হয়?",["কমে যায়","বেড়ে যায়","অপরিবর্তিত থাকে","প্রথমে বাড়ে পরে কমে"],0,"NH₄Cl দ্রবণের সময় তাপ শোষণ করে (তাপগ্রাহী), তাই তাপমাত্রা কমে। (অনুচ্ছেদ ১.৫)"],
+["রাসায়নিক পদার্থের ঝুঁকি-চিহ্ন (Globally Harmonized System) কোন সংস্থা প্রবর্তন করেছে?",["জাতিসংঘ পরিবেশ কর্মসূচি (UNEP)","WHO","UNESCO","IUPAC"],0,"UNEP ঝুঁকি ও সতর্কতা বোঝাতে সর্বজনীন চিহ্ন প্রবর্তন করেছে। (অনুচ্ছেদ ১.৬)"],
+["HCl ও H₂SO₄ কোন ধরনের ঝুঁকির (hazard) উদাহরণ?",["বিস্ফোরক","ক্ষয়কারী (corrosive)","তেজস্ক্রিয়","দাহ্য"],1,"HCl, H₂SO₄ ও ঘন NaOH শরীরের সংস্পর্শে ক্ষতি করে, তাই ক্ষয়কারী। (অনুচ্ছেদ ১.৬)"]],
+"৮":[
+["রাসায়নিক শক্তির উৎস কী?",["পরমাণুদের সংযুক্ত রাখা বন্ধনের শক্তি","নিউক্লিয়াসের আকার","পদার্থের আয়তন","আলোর গতি"],0,"পরমাণুগুলোকে যে শক্তিতে যুক্ত রাখা হয় তা-ই বন্ধন শক্তি, অর্থাৎ রাসায়নিক শক্তি। (অনুচ্ছেদ ৮.১.১)"],
+["১ ক্যালরি (cal) = কত জুল?",["1.8 J","4.18 J","41.8 J","100 J"],1,"১ cal = 4.18 J; জুল শক্তির আন্তর্জাতিক একক। (অনুচ্ছেদ ৮.১.১)"],
+["CH₄ + 2O₂ → CO₂ + 2H₂O, ΔH = −890 kJ/mol। বিক্রিয়াটি কোন ধরনের?",["তাপোৎপাদী","তাপহারী","উভমুখী কিন্তু তাপহীন","নিউক্লিয় বিক্রিয়া"],0,"ΔH ঋণাত্মক হলে তাপ নির্গত হয়, তাই এটি তাপোৎপাদী। (অনুচ্ছেদ ৮.১.২)"],
+["CaCO₃ → CaO + CO₂ ; ΔH = +176.8 kJ/mol। এটি কোন ধরনের বিক্রিয়া?",["তাপোৎপাদী","তাপহারী","প্রশমন","জারণ"],1,"ΔH ধনাত্মক, অর্থাৎ তাপ শোষিত হয়; তাই তাপহারী। (অনুচ্ছেদ ৮.১.২)"],
+["বন্ধন শক্তি ব্যবহার করে ΔH = ?",["উৎপাদের মোট বন্ধন শক্তি − বিক্রিয়কের মোট বন্ধন শক্তি","বিক্রিয়কের মোট বন্ধন শক্তি − উৎপাদের মোট বন্ধন শক্তি","বিক্রিয়ক + উৎপাদের বন্ধন শক্তির যোগফল","বিক্রিয়কের বন্ধন শক্তি ÷ উৎপাদের বন্ধন শক্তি"],1,"ΔH = (ভাঙা বন্ধনের মোট শক্তি) − (গঠিত বন্ধনের মোট শক্তি)। (অনুচ্ছেদ ৮.১.৩)"],
+["CH₄ + Cl₂ → CH₃Cl + HCl বিক্রিয়ায় C−H = 414, Cl−Cl = 244, C−Cl = 326, H−Cl = 431 kJ/mol হলে ΔH কত?",["−99 kJ","+99 kJ","−757 kJ","+658 kJ"],0,"ভাঙা: 414 + 244 = 658; গঠিত: 326 + 431 = 757; ΔH = 658 − 757 = −99 kJ। (অনুচ্ছেদ ৮.১.৩)"],
+["তড়িৎ বিশ্লেষণে অ্যানোডে কোন ধরনের বিক্রিয়া ঘটে?",["বিজারণ","জারণ","প্রশমন","অধঃক্ষেপণ"],1,"অ্যানোডে ইলেকট্রন ত্যাগ (জারণ), ক্যাথোডে ইলেকট্রন গ্রহণ (বিজারণ) ঘটে। (অনুচ্ছেদ ৮.৩)"],
+["গলিত NaCl এর তড়িৎ বিশ্লেষণে ক্যাথোডে কী উৎপন্ন হয়?",["ক্লোরিন গ্যাস","সোডিয়াম ধাতু","হাইড্রোজেন গ্যাস","অক্সিজেন গ্যাস"],1,"Na⁺ + e⁻ → Na (ক্যাথোডে বিজারণ); অ্যানোডে Cl₂ উৎপন্ন হয়। (অনুচ্ছেদ ৮.৩.২)"],
+["পানির তড়িৎ বিশ্লেষণে কয়েক ফোঁটা H₂SO₄ মেশানো হয় কেন?",["পানির পরিবাহিতা বাড়াতে","পানি ঠান্ডা করতে","গ্যাসের রং বদলাতে","তড়িৎদ্বার রক্ষা করতে"],0,"বিশুদ্ধ পানি খুব কম আয়নিত হয়; অ্যাসিড আয়ন বাড়িয়ে পরিবাহিতা বাড়ায়। (অনুচ্ছেদ ৮.৩.২)"],
+["ড্যানিয়েল কোষে অ্যানোড কোনটি এবং সেখানে কী বিক্রিয়া ঘটে?",["Zn; জারণ (Zn → Zn²⁺ + 2e⁻)","Cu; জারণ","Zn; বিজারণ","Cu; বিজারণ (Cu²⁺ + 2e⁻ → Cu)"],0,"বেশি সক্রিয় ধাতু Zn অ্যানোড; এটি ইলেকট্রন ত্যাগ করে জারিত হয়। (অনুচ্ছেদ ৮.৪)"],
+["তড়িৎ প্রলেপনে (electroplating) যে বস্তুর ওপর প্রলেপ দেওয়া হয় সেটি কোন তড়িৎদ্বার?",["অ্যানোড","ক্যাথোড","লবণ সেতু","কোনোটিই নয়"],1,"প্রলেপ্য বস্তুকে ব্যাটারির ঋণাত্মক প্রান্তে (ক্যাথোড) যুক্ত করা হয়। (অনুচ্ছেদ ৮.৩.২)"],
+["যে নিউক্লিয় বিক্রিয়ায় ভারী নিউক্লিয়াস ভেঙে হালকা নিউক্লিয়াস তৈরি হয় তাকে কী বলে?",["ফিউশন","ফিশন","জারণ","প্রশমন"],1,"U-235 নিউট্রনের আঘাতে ভেঙে Ba ও Kr তৈরি করে; এটি ফিশন। (অনুচ্ছেদ ৮.৫)"]],
+"১০":[
+["গ্যালেনা (PbS) কোন ধাতুর আকরিক?",["লোহা","সীসা (Pb)","তামা","অ্যালুমিনিয়াম"],1,"গ্যালেনা থেকে লাভজনকভাবে সীসা নিষ্কাশন করা যায়। (পৃ. ২৩৭)"],
+["সালফাইড আকরিক সমৃদ্ধকরণে কোন পদ্ধতি ব্যবহৃত হয়?",["চুম্বকীয় পৃথকীকরণ","ফেনা ভাসমান (froth flotation) পদ্ধতি","ধৌতকরণ","স্ফটিকীকরণ"],1,"সালফাইড আকরিক তেলের সাথে ভেসে ফেনায় ওঠে; খাদ নিচে থেকে যায়। (পৃ. ২৩৯)"],
+["সালফাইড আকরিককে বাতাসে উত্তপ্ত করে অক্সাইডে রূপান্তরের পদ্ধতির নাম কী?",["ক্যালসিনেশন","রোস্টিং (জারণ-দহন)","গলন","তড়িৎ বিশ্লেষণ"],1,"বাতাসের উপস্থিতিতে সালফাইড আকরিক উত্তপ্ত করাকে রোস্টিং বলে। (পৃ. ২৪১)"],
+["অ্যালুমিনিয়াম নিষ্কাশনে ক্রায়োলাইট (Na₃AlF₆) মেশানো হয় কেন?",["Al₂O₃ এর গলনাঙ্ক কমাতে","ধাতুর রং বদলাতে","ক্যাথোড রক্ষা করতে","গ্যাস উৎপন্ন করতে"],0,"Al₂O₃ এর গলনাঙ্ক 2050°C; ক্রায়োলাইট মেশালে তা প্রায় 800–1000°C এ নেমে আসে। (পৃ. ২৪২)"],
+["কার্বন বিজারণ পদ্ধতিতে কোন ধাতু নিষ্কাশন করা হয়?",["K","Na","Zn","Al"],2,"মাঝারি সক্রিয় ধাতু (Zn, Fe, Pb, Cu) কার্বন বিজারণে নিষ্কাশিত হয়; K, Na, Al তড়িৎ বিশ্লেষণে। (পৃ. ২৪৩)"],
+["তড়িৎ বিশ্লেষণে তামা বিশুদ্ধকরণে অশুদ্ধ তামার দণ্ডটি কোন তড়িৎদ্বারে থাকে?",["ক্যাথোড","অ্যানোড","লবণ সেতুতে","দ্রবণে ভাসমান"],1,"অশুদ্ধ তামা অ্যানোড; Cu → Cu²⁺ + 2e⁻ এবং বিশুদ্ধ তামা ক্যাথোডে জমা হয়। (পৃ. ২৪৫)"],
+["মরিচার রাসায়নিক সংকেত কোনটি?",["Fe₂O₃·nH₂O","FeO","FeCl₃","Fe₃C"],0,"আয়রন মরিচা ধরলে আর্দ্র (হাইড্রেটেড) ফেরিক অক্সাইড Fe₂O₃·nH₂O তৈরি হয়। (পৃ. ২৫০)"],
+["লোহার ওপর দস্তার (Zn) প্রলেপ দেওয়াকে কী বলে?",["তড়িৎ প্রলেপন","গ্যালভানাইজিং","ভালকানাইজিং","পাতন"],1,"যেকোনো ধাতুর ওপর দস্তার প্রলেপ দেওয়াকে গ্যালভানাইজিং বলে। (পৃ. ২৫৩)"],
+["সালফিউরিক অ্যাসিডের শিল্প উৎপাদন পদ্ধতির নাম কী এবং অনুঘটক কী?",["কনট্যাক্ট পদ্ধতি; V₂O₅","হেবার পদ্ধতি; Fe","সলভে পদ্ধতি; Ni","ফ্র্যাশ পদ্ধতি; Pt"],0,"2SO₂ + O₂ ⇌ 2SO₃ বিক্রিয়াটি 450–500°C এ V₂O₅ অনুঘটকে হয়। (পৃ. ২৫৬)"],
+["ঘন H₂SO₄ চিনি (C₁₂H₂₂O₁₁) থেকে পানি শোষণ করে কার্বন তৈরি করে। এটি এর কোন ধর্ম?",["অম্লধর্ম","জারণ ধর্ম","নির্জলীকরণ (dehydrating) ধর্ম","বিজারণ ধর্ম"],2,"যে পদার্থ অন্য যৌগ থেকে পানি শোষণ করে তা নির্জলীকারক। (পৃ. ২৫৭)"],
+["পিতল (brass) কোন ধাতু দিয়ে তৈরি সংকর?",["তামা ও দস্তা","তামা ও টিন","লোহা ও কার্বন","অ্যালুমিনিয়াম ও ম্যাগনেসিয়াম"],0,"তামা ও দস্তা গলিয়ে মিশিয়ে পিতল তৈরি হয়। (পৃ. ২৪৮)"]],
+"১১":[
+["প্রাকৃতিক গ্যাসের প্রধান উপাদান কোনটি?",["মিথেন","ইথেন","প্রোপেন","বিউটেন"],0,"বাংলাদেশের প্রাকৃতিক গ্যাসে ৯৩–৯৮% মিথেন থাকে। (অনুচ্ছেদ ১১.১)"],
+["অপরিশোধিত পেট্রোলিয়ামকে বিভিন্ন অংশে পৃথক করা হয় কোন পদ্ধতিতে?",["আংশিক পাতন (fractional distillation)","ছাঁকন","স্ফটিকীকরণ","তড়িৎ বিশ্লেষণ"],0,"ফুটনাঙ্কের পার্থক্যের ভিত্তিতে আংশিক পাতনে পেট্রোল, কেরোসিন, ডিজেল ইত্যাদি পৃথক হয়। (অনুচ্ছেদ ১১.১.২)"],
+["LPG-তে হাইড্রোকার্বনের অণুতে কয়টি কার্বন পরমাণু থাকে?",["১–৪টি","৫–১০টি","১১–১৬টি","৩০টির বেশি"],0,"পেট্রোলিয়াম গ্যাস (ফুটনাঙ্ক ০–২০°C) এ ১–৪টি কার্বন থাকে; এটিই LPG। (অনুচ্ছেদ ১১.১.২)"],
+["অ্যালকেনের সাধারণ সংকেত কোনটি?",["CₙH₂ₙ₊₂","CₙH₂ₙ","CₙH₂ₙ₋₂","CₙH₂ₙ₊₁OH"],0,"অ্যালকেন CₙH₂ₙ₊₂, অ্যালকিন CₙH₂ₙ, অ্যালকাইন CₙH₂ₙ₋₂। (অনুচ্ছেদ ১১.২)"],
+["অ্যালকিনের সাধারণ সংকেত কোনটি?",["CₙH₂ₙ₊₂","CₙH₂ₙ","CₙH₂ₙ₋₂","CₙH₂ₙ₊₁COOH"],1,"অ্যালকিনে একটি C=C দ্বিবন্ধন থাকে; সাধারণ সংকেত CₙH₂ₙ। (অনুচ্ছেদ ১১.৪)"],
+["ইথিনে লাল ব্রোমিন দ্রবণ যোগ করলে কী দেখা যায়?",["লাল রং বিলুপ্ত হয়","নীল রং তৈরি হয়","সাদা অধঃক্ষেপ পড়ে","কোনো পরিবর্তন হয় না"],0,"যোজন বিক্রিয়ায় ডাইব্রোমোইথেন তৈরি হয়; এটি অসম্পৃক্ততার পরীক্ষা। (অনুচ্ছেদ ১১.৪)"],
+["পলিথিন তৈরির মনোমার কোনটি?",["ইথিন (CH₂=CH₂)","প্রোপিন","ভিনাইল ক্লোরাইড","মিথেন"],0,"nCH₂=CH₂ → (−CH₂−CH₂−)ₙ; ১০০০ atm চাপ ও 200°C এ। (অনুচ্ছেদ ১১.৪)"],
+["ক্যালসিয়াম কার্বাইডের সাথে পানির বিক্রিয়ায় কোন গ্যাস পাওয়া যায়?",["মিথেন","ইথিন","ইথাইন (অ্যাসিটিলিন)","ইথেন"],2,"CaC₂ + 2H₂O → C₂H₂ + Ca(OH)₂। (অনুচ্ছেদ ১১.৪)"],
+["ফরমালিন কী?",["৪০% ফরমালডিহাইড দ্রবণ","৯৬% ইথানল","৪–১০% ইথানোয়িক অ্যাসিড","মিথেনের দ্রবণ"],0,"ফরমালিন ফরমালডিহাইডের ৪০% দ্রবণ; ল্যাবে প্রাণীদেহ সংরক্ষণে ব্যবহৃত হয়, খাদ্যে নয়। (অনুচ্ছেদ ১১.৫)"],
+["ভিনেগার কী?",["৪–১০% ইথানোয়িক অ্যাসিডের জলীয় দ্রবণ","৯৬% ইথানল","৪০% ফরমালডিহাইড","অ্যামোনিয়ার দ্রবণ"],0,"ভিনেগার খাদ্য সংরক্ষণে ব্যবহৃত দুর্বল অ্যাসিডের দ্রবণ। (অনুচ্ছেদ ১১.৫)"],
+["নাইলন 6:6 কোন ধরনের পলিমার?",["সংযোজন পলিমার","ঘনীভবন (condensation) পলিমার","প্রাকৃতিক পলিমার","কোনোটিই নয়"],1,"মনোমার যুক্ত হওয়ার সময় ছোট অণু (পানি) বের হয়, তাই ঘনীভবন পলিমার। (অনুচ্ছেদ ১১.৭)"]],
+"১২":[
+["খাবার সোডার (বেকিং সোডা) রাসায়নিক নাম কী?",["সোডিয়াম হাইড্রোজেন কার্বনেট (NaHCO₃)","সোডিয়াম কার্বনেট (Na₂CO₃)","সোডিয়াম ক্লোরাইড","সোডিয়াম হাইড্রক্সাইড"],0,"বেকিং সোডা = সোডিয়াম বাইকার্বনেট, NaHCO₃। (অনুচ্ছেদ ১২.১)"],
+["বেকিং পাউডার কীসের মিশ্রণ?",["বেকিং সোডা ও টারটারিক অ্যাসিড","ওয়াশিং সোডা ও লবণ","চিনি ও লবণ","বেকিং সোডা ও চুন"],0,"NaHCO₃ ও টারটারিক অ্যাসিড মিশিয়ে বেকিং পাউডার তৈরি হয়। (অনুচ্ছেদ ১২.১)"],
+["কেক ফুলে ওঠার কারণ কোন গ্যাস?",["CO₂","O₂","N₂","H₂"],0,"বেকিং সোডা ও টারটারিক অ্যাসিডের বিক্রিয়ায় CO₂ তৈরি হয়। (অনুচ্ছেদ ১২.১)"],
+["ওয়াশিং সোডার সংকেত কোনটি?",["Na₂CO₃·10H₂O","NaHCO₃","Na₂CO₃","NaOH"],0,"সোডিয়াম কার্বনেটের ডেকাহাইড্রেট Na₂CO₃·10H₂O হলো ওয়াশিং সোডা। (অনুচ্ছেদ ১২.২)"],
+["তেল বা চর্বির সাথে NaOH বিক্রিয়ায় সাবান তৈরির পদ্ধতিকে কী বলে?",["স্যাপোনিফিকেশন","পলিমারকরণ","ক্র্যাকিং","ক্যালসিনেশন"],0,"তেল/চর্বি + ক্ষার → সাবান + গ্লিসারিন, একে স্যাপোনিফিকেশন বলে। (অনুচ্ছেদ ১২.২)"],
+["ব্লিচিং পাউডারের রাসায়নিক সংকেত কোনটি?",["Ca(OCl)Cl","CaCl₂","CaOCl","NaOCl"],0,"ব্লিচিং পাউডার ক্যালসিয়াম অক্সিক্লোরাইড, Ca(OCl)Cl। (অনুচ্ছেদ ১২.২)"],
+["ব্লিচিং পাউডার কাপড়ের রং বিনষ্ট করে কীভাবে?",["নাসেন্ট অক্সিজেন [O] দ্বারা","হাইড্রোজেন দ্বারা","CO₂ দ্বারা","তাপ দ্বারা"],0,"HOCl ভেঙে নাসেন্ট অক্সিজেন [O] তৈরি করে, যা রঙিন পদার্থকে বর্ণহীন করে। (অনুচ্ছেদ ১২.২)"],
+["অ্যামোনিয়া উৎপাদনের হেবার (Haber) প্রক্রিয়ায় N₂ ও H₂ কী অনুপাতে নেওয়া হয়?",["১ : ৩","৩ : ১","১ : ১","২ : ১"],0,"N₂ + 3H₂ ⇌ 2NH₃ + 92 kJ; অনুপাত ১:৩, Fe অনুঘটক, 450–550°C। (অনুচ্ছেদ ১২.২)"],
+["ইউরিয়া তৈরিতে কোন দুটি গ্যাস ব্যবহৃত হয়?",["CO₂ ও NH₃","N₂ ও H₂","SO₂ ও O₂","CH₄ ও Cl₂"],0,"CO₂ + 2NH₃ → NH₂COONH₄ → NH₂CONH₂ + H₂O। (অনুচ্ছেদ ১২.৩)"],
+["নিচের কোনটি অনুমোদিত (সুপারিশকৃত) খাদ্য সংরক্ষক?",["সোডিয়াম বেনজোয়েট","ফরমালিন","ইথিলিন","অ্যাসিটিলিন"],0,"সোডিয়াম বেনজোয়েট, বেনজোয়িক অ্যাসিড, ভিনেগার, লবণ ও চিনির দ্রবণ অনুমোদিত সংরক্ষক। (অনুচ্ছেদ ১২.৩)"]],
+"২":[
+["কোন অবস্থায় আন্তঃআণবিক আকর্ষণ বল সবচেয়ে বেশি?",["কঠিন","তরল","গ্যাস","সব অবস্থায় সমান"],0,"কঠিন পদার্থের কণাগুলো খুব কাছাকাছি থাকে, তাই আকর্ষণ সবচেয়ে বেশি। (অনুচ্ছেদ ২.১)"],
+["কোন অবস্থার পদার্থের নির্দিষ্ট ভর আছে কিন্তু নির্দিষ্ট আকার ও আয়তন নেই?",["কঠিন","তরল","গ্যাসীয়","কোনোটিই নয়"],2,"গ্যাস পাত্রের পুরো আয়তন দখল করে, তাই নির্দিষ্ট আকার বা আয়তন নেই। (অনুচ্ছেদ ২.১)"],
+["ব্যাপন (diffusion) কী?",["কণার উচ্চ ঘনমাত্রা থেকে নিম্ন ঘনমাত্রার দিকে স্বতঃস্ফূর্তভাবে ছড়িয়ে পড়া","গ্যাসের ছোট ছিদ্র দিয়ে একটি একটি করে বের হওয়া","কঠিন থেকে সরাসরি গ্যাসে রূপান্তর","তরল থেকে কঠিনে রূপান্তর"],0,"ঘরের কোণে খোলা সুগন্ধির গন্ধ পুরো ঘরে ছড়ানো ব্যাপনের উদাহরণ। (অনুচ্ছেদ ২.৩)"],
+["HCl ও NH₃ গ্যাসের পরীক্ষায় সাদা ধোঁয়া (NH₄Cl) নলের কোথায় তৈরি হয়?",["ঠিক মাঝখানে","HCl এর দিকে বেশি কাছে","NH₄OH এর দিকে বেশি কাছে","দুই প্রান্তেই সমান"],1,"হালকা NH₃ (১৭) দ্রুত ব্যাপিত হয় ও বেশি দূরত্ব যায়; ভারী HCl (৩৬.৫) কম যায়। তাই ধোঁয়া HCl এর কাছে। (অনুচ্ছেদ ২.৩)"],
+["নিচের কোন গ্যাসের ব্যাপন হার সবচেয়ে বেশি?",["H₂","N₂","O₂","CO₂"],0,"আণবিক ভর যত কম, ব্যাপন হার তত বেশি; H₂ এর ভর সবচেয়ে কম (২)। (অনুচ্ছেদ ২.৩)"],
+["১ atm চাপে বিশুদ্ধ পানির স্ফুটনাঙ্ক কত?",["০°C","৫০°C","১০০°C","১৩৩°C"],2,"১ atm চাপে পানি ১০০°C এ ফোটে। (অনুচ্ছেদ ২.৬)"],
+["বিশুদ্ধ কঠিন পদার্থের গলনাঙ্ক সম্পর্কে কোনটি সঠিক?",["একটি নির্দিষ্ট তাপমাত্রা","একটি তাপমাত্রার পরিসর","কোনো নির্দিষ্ট মান নেই","সবসময় ০°C"],0,"বিশুদ্ধ কঠিন পদার্থের নির্দিষ্ট গলনাঙ্ক থাকে; অশুদ্ধ হলে পরিসর জুড়ে গলে। (অনুচ্ছেদ ২.৬)"],
+["বরফ গলার সময় (০°C এ) তাপ দিতে থাকলে তাপমাত্রার কী হয়?",["বাড়তে থাকে","কমতে থাকে","স্থির থাকে","শূন্য থেকে নিচে নেমে যায়"],2,"এই তাপ শুধু অবস্থার পরিবর্তন ঘটায়, তাই সব বরফ গলা পর্যন্ত তাপমাত্রা স্থির থাকে। (অনুচ্ছেদ ২.৬)"],
+["নিচের কোনটি ঊর্ধ্বপাতিত (sublimate) হয়?",["সোডা অ্যাশ","কপার সালফেট","NaCl","NH₄Cl"],3,"NH₄Cl, কর্পূর, ন্যাফথালিন, আয়োডিন ইত্যাদি তাপে সরাসরি বাষ্প হয়। (অনুচ্ছেদ ২.৭)"],
+["পাতন (distillation) = ?",["বাষ্পীভবন + ঘনীভবন","গলন + হিমায়ন","ঊর্ধ্বপাতন + গলন","ব্যাপন + নিঃসরণ"],0,"তরলকে তাপে বাষ্প করে (বাষ্পীভবন) আবার ঠান্ডা করে তরল (ঘনীভবন) পাওয়াই পাতন। (অনুচ্ছেদ ২.৭)"]],
+"৩":[
+["ইলেকট্রনের আপেক্ষিক ভর ধরা হয় কত?",["১","১৮৪০","০","−১"],2,"ইলেকট্রনের ভর প্রোটনের প্রায় ১৮৪০ ভাগের ১ ভাগ, তাই আপেক্ষিক ভর ০ ধরা হয়। (অনুচ্ছেদ ৩.৫)"],
+["পরমাণুর নিউক্লিয়াসে কী কী থাকে?",["ইলেকট্রন ও প্রোটন","ইলেকট্রন ও নিউট্রন","প্রোটন ও নিউট্রন","শুধু ইলেকট্রন"],2,"প্রোটন ও নিউট্রন নিউক্লিয়াসে থাকে; ইলেকট্রন নিউক্লিয়াসের বাইরে ঘোরে। (অনুচ্ছেদ ৩.৫)"],
+["পারমাণবিক সংখ্যা (Z) কীসের সমান?",["নিউট্রন সংখ্যা","প্রোটন সংখ্যা","ভর সংখ্যা","প্রোটন + নিউট্রন"],1,"নিউক্লিয়াসে প্রোটনের সংখ্যাই পারমাণবিক সংখ্যা। (অনুচ্ছেদ ৩.৫)"],
+["Na এর ভর সংখ্যা ২৩ ও পারমাণবিক সংখ্যা ১১ হলে নিউট্রন সংখ্যা কত?",["১১","১২","২৩","৩৪"],1,"নিউট্রন = ভর সংখ্যা − প্রোটন সংখ্যা = ২৩ − ১১ = ১২। (অনুচ্ছেদ ৩.৫)"],
+["নিউক্লিয়াসের ধারণা প্রথম কোন বিজ্ঞানী দেন?",["ডাল্টন","রাদারফোর্ড","বোর","মেন্ডেলিভ"],1,"রাদারফোর্ড ১৯১১ সালে নিউক্লিয়াসসহ পরমাণু মডেল দেন (নিউক্লিয়ার মডেল)। (অনুচ্ছেদ ৩.৬.১)"],
+["বোরের পরমাণু মডেল কোন পরমাণুর বর্ণালি ব্যাখ্যা করতে পারে?",["বহু ইলেকট্রনবিশিষ্ট পরমাণু","হাইড্রোজেন (১টি ইলেকট্রন)","সব আয়ন","কোনোটিই নয়"],1,"বোর মডেল শুধু একটি ইলেকট্রনবিশিষ্ট হাইড্রোজেনের বর্ণালি ব্যাখ্যা করতে পারে। (অনুচ্ছেদ ৩.৬.২)"],
+["n তম শক্তিস্তরে সর্বোচ্চ কতটি ইলেকট্রন থাকতে পারে? (M স্তরের জন্য n = ৩)",["2n; M এ ৬","n²; M এ ৯","2n²; M এ ১৮","n³; M এ ২৭"],2,"সর্বোচ্চ ইলেকট্রন সংখ্যা 2n²; M স্তরে 2 × 3² = 18। (অনুচ্ছেদ ৩.৭)"],
+["4s ও 3d অরবিটালের মধ্যে ইলেকট্রন আগে কোনটিতে প্রবেশ করে?",["3d","4s","একসাথে দুটিতে","কোনোটিতেই নয়"],1,"(n + l) এর মান 4s এ ৪ এবং 3d তে ৫; কম মানের 4s আগে পূর্ণ হয়। (অনুচ্ছেদ ৩.৭.২)"],
+["আইসোটোপ (isotope) কী?",["সমান প্রোটন কিন্তু ভিন্ন নিউট্রনবিশিষ্ট একই মৌলের পরমাণু","সমান নিউট্রন কিন্তু ভিন্ন প্রোটন","ভিন্ন মৌলের সমান ভরের পরমাণু","আয়নিত পরমাণু"],0,"প্রোটন সংখ্যা সমান, নিউট্রন সংখ্যা (ফলে ভর সংখ্যা) ভিন্ন হলে তারা পরস্পরের আইসোটোপ। (অনুচ্ছেদ ৩.৮)"],
+["Cl এর দুটি আইসোটোপ ³⁵Cl (৭৫%) ও ³⁷Cl (২৫%)। গড় আপেক্ষিক পারমাণবিক ভর কত?",["৩৫","৩৫.৫","৩৬","৩৭"],1,"(৩৫ × ৭৫ + ৩৭ × ২৫) / ১০০ = ৩৫.৫। (অনুচ্ছেদ ৩.৯.১)"],
+["Cr (পারমাণবিক সংখ্যা ২৪) এর সঠিক ইলেকট্রন বিন্যাসের শেষ অংশ কোনটি?",["3d⁴ 4s²","3d⁵ 4s¹","3d⁶ 4s⁰","3d³ 4s³"],1,"অর্ধপূর্ণ d অরবিটাল (3d⁵) বেশি স্থিতিশীল, তাই 4s থেকে একটি ইলেকট্রন 3d তে আসে। (অনুচ্ছেদ ৩.৭.৩)"]],
+"৯":[
+["অ্যাসিড পানিতে কোন আয়ন তৈরি করে?",["OH⁻","H⁺","Na⁺","Cl⁻"],1,"অ্যাসিড পানিতে ভেঙে হাইড্রোজেন আয়ন (H⁺) দেয়। (অনুচ্ছেদ ৯.১)"],
+["অ্যাসিডের দ্রবণে নীল লিটমাস কাগজের রং কী হয়?",["লাল","সবুজ","অপরিবর্তিত থাকে","বর্ণহীন"],0,"অ্যাসিড নীল লিটমাসকে লাল করে। (অনুচ্ছেদ ৯.১)"],
+["নিচের কোনটি তীব্র (strong) অ্যাসিড?",["CH₃COOH","H₂CO₃","HCl","সাইট্রিক অ্যাসিড"],2,"HCl পানিতে ১০০% আয়নিত হয়; বাকিগুলো আংশিক আয়নিত দুর্বল অ্যাসিড। (অনুচ্ছেদ ৯.১)"],
+["CaCO₃ + 2HCl বিক্রিয়ায় কী কী উৎপন্ন হয়?",["CaCl₂ + H₂ ","CaCl₂ + H₂O + CO₂","Ca(OH)₂ + Cl₂","CaO + HCl"],1,"ধাতব কার্বনেট + অ্যাসিড → লবণ + পানি + CO₂। (অনুচ্ছেদ ৯.১.১)"],
+["নিচের কোনটি ক্ষারক (base) কিন্তু ক্ষার (alkali) নয়?",["NaOH","KOH","CaO","NH₄OH"],2,"CaO তে OH⁻ মূলক নেই, তাই এটি ক্ষারক কিন্তু ক্ষার নয়। (অনুচ্ছেদ ৯.২)"],
+["NH₄Cl এর সাথে NaOH মিশিয়ে গরম করলে কোন গ্যাস পাওয়া যায়?",["H₂","Cl₂","NH₃","CO₂"],2,"অ্যামোনিয়াম লবণ + ক্ষার → NH₃ গ্যাস; এটি অ্যামোনিয়াম লবণের বৈশিষ্ট্যমূলক বিক্রিয়া। (অনুচ্ছেদ ৯.২.২)"],
+["Fe(NO₃)₂ দ্রবণে NaOH দিলে কী রঙের অধঃক্ষেপ পড়ে?",["সাদা","সবুজ","লালচে বাদামি","হালকা নীল"],1,"Fe(OH)₂ সবুজ অধঃক্ষেপ; Fe(OH)₃ লালচে বাদামি, Cu(OH)₂ হালকা নীল। (অনুচ্ছেদ ৯.২.২)"],
+["বিশুদ্ধ পানির pH কত?",["০","৭","১০","১৪"],1,"বিশুদ্ধ পানিতে [H⁺] = 10⁻⁷ mol/L, তাই pH = ৭ (নিরপেক্ষ)। (অনুচ্ছেদ ৯.৪)"],
+["কোনো দ্রবণের pH ৭ এর বেশি হলে দ্রবণটি কেমন?",["অম্লীয়","ক্ষারীয়","নিরপেক্ষ","কোনোটিই নয়"],1,"pH < ৭ অম্লীয়, pH = ৭ নিরপেক্ষ, pH > ৭ ক্ষারীয়। (অনুচ্ছেদ ৯.৪)"],
+["অস্থায়ী খরতা সৃষ্টি করে কোন লবণ?",["Ca, Mg এর ক্লোরাইড","Ca, Mg এর সালফেট","Ca, Mg, Fe এর বাইকার্বনেট","সোডিয়াম ক্লোরাইড"],2,"বাইকার্বনেট (HCO₃⁻) লবণ অস্থায়ী খরতার কারণ; ফুটালে CaCO₃ অধঃক্ষেপ পড়ে খরতা দূর হয়। (অনুচ্ছেদ ৯.৭)"],
+["স্থায়ী খরতা দূর করতে পানিতে কী যোগ করা হয়?",["সোডিয়াম ক্লোরাইড","সোডিয়াম কার্বনেট","হাইড্রোক্লোরিক অ্যাসিড","চিনি"],1,"Na₂CO₃ Ca²⁺ ও Mg²⁺ কে CaCO₃, MgCO₃ অধঃক্ষেপে পরিণত করে। (অনুচ্ছেদ ৯.৭)"],
+["অম্লবৃষ্টিতে বৃষ্টির পানির pH প্রায় কত বা তার কম হয়?",["৪","৭","৯","১২"],0,"দূষণের ফলে বৃষ্টির pH ৪ বা তারও কম হলে তাকে অম্লবৃষ্টি বলে। (অনুচ্ছেদ ৯.৬)"]],
+"৪":[
+["আধুনিক পর্যায় সারণির মূল ভিত্তি কী?",["পারমাণবিক ভর","পারমাণবিক সংখ্যা","ইলেকট্রন বিন্যাস","ঘনত্ব"],2,"ইলেকট্রন বিন্যাসই পর্যায় সারণির মূল ভিত্তি; এর মাধ্যমে মৌলের গ্রুপ ও পর্যায় নির্ণয় করা যায়। (পৃ. ৬৮)"],
+["১৯১৩ সালে মোজলে মৌলগুলোকে কীসের ভিত্তিতে সাজানোর প্রস্তাব দেন?",["পারমাণবিক ভর","পারমাণবিক সংখ্যা","গলনাঙ্ক","আয়তন"],1,"পারমাণবিক সংখ্যার ভিত্তিতে সাজালে Ar (18) আগে ও K (19) পরে আসে এবং মেন্ডেলিভের ত্রুটি দূর হয়। (পৃ. ৬৪)"],
+["ডোবেরাইনারের ত্রয়ী সূত্র (Law of Triads) অনুযায়ী প্রথম ত্রয়ী কোনটি?",["H, He, Li","Cl, Br, I","C, Si, Na","O, Ne, Mg"],1,"ডোবেরাইনার Cl, Br, I কে প্রথম ত্রয়ী হিসেবে চিহ্নিত করেন। (পৃ. ৬১)"],
+["আধুনিক পর্যায় সারণিতে মোট কয়টি পর্যায় ও কয়টি শ্রেণি (গ্রুপ) আছে?",["৮টি পর্যায়, ১৮টি শ্রেণি","৭টি পর্যায়, ১৮টি শ্রেণি","৭টি পর্যায়, ৮টি শ্রেণি","১২টি পর্যায়, ৮টি শ্রেণি"],1,"আধুনিক সারণিতে ৭টি পর্যায় (সারি) ও ১৮টি গ্রুপ (কলাম) আছে; ১২ সারি ও ৮ কলাম ছিল মেন্ডেলিভের সারণিতে। (পৃ. ৬৫)"],
+["পটাসিয়াম (K, পারমাণবিক সংখ্যা ১৯) কোন পর্যায়ের মৌল?",["১ম","২য়","৩য়","৪র্থ"],3,"K এর ইলেকট্রন বিন্যাস 1s² 2s² 2p⁶ 3s² 3p⁶ 4s¹; সর্ববহিঃস্থ শক্তিস্তর ৪, তাই ৪র্থ পর্যায়। (পৃ. ৬৬)"],
+["বোরনের (B) ইলেকট্রন বিন্যাস 1s² 2s² 2p¹। এটি কোন গ্রুপের মৌল?",["৩","৫","১৩","১৫"],2,"s ও p এর ইলেকট্রন সংখ্যা (২ + ১ = ৩) এর সাথে ১০ যোগ করে গ্রুপ ১৩। (পৃ. ৬৬)"],
+["আয়রনের (Fe, পারমাণবিক সংখ্যা ২৬) ইলেকট্রন বিন্যাসের শেষ অংশ 3d⁶ 4s²। এটি কোন গ্রুপের মৌল?",["২","৬","৮","১৪"],2,"d ও s এর ইলেকট্রন যোগ করে ৬ + ২ = ৮, তাই গ্রুপ ৮। (পৃ. ৬৭)"],
+["হাইড্রোজেন অধাতু হলেও গ্রুপ ১ এ রাখা হয় কেন?",["এর পারমাণবিক সংখ্যা সবচেয়ে বেশি","বাইরের স্তরে ১টি ইলেকট্রন থাকে এবং বেশিরভাগ ধর্ম ক্ষার ধাতুর মতো","এটি নিষ্ক্রিয় গ্যাস","এটি ধাতু"],1,"H এর সর্ববহিঃস্তরে ১টি ইলেকট্রন আছে এবং অধিকাংশ ধর্ম ক্ষার ধাতুর সাথে মেলে। (পৃ. ৬৯)"],
+["হিলিয়াম (He) কে গ্রুপ ১৮ এ রাখার কারণ কী?",["এর ইলেকট্রন সংখ্যা ৮","এর ধর্ম অন্যান্য নিষ্ক্রিয় গ্যাসের মতো","এটি ক্ষারীয় মৃত্তিকা ধাতু","এটি তরল"],1,"He এর ধর্ম Ne, Ar ইত্যাদি নিষ্ক্রিয় গ্যাসের মতো, গ্রুপ ২ এর ধাতুর মতো নয়। (পৃ. ৬৯)"],
+["একই পর্যায়ে বাম থেকে ডানে গেলে পারমাণবিক ব্যাসার্ধ কেমন হয়?",["বাড়ে","কমে","একই থাকে","প্রথমে কমে পরে বাড়ে"],1,"পারমাণবিক সংখ্যা বাড়ে কিন্তু শক্তিস্তর একই থাকে, নিউক্লিয়াসের আকর্ষণ বাড়ায় ব্যাসার্ধ কমে। (পৃ. ৭১)"],
+["Li, Na, K, Rb এর মধ্যে কোনটির আয়নীকরণ শক্তি সবচেয়ে বেশি?",["Li","Na","K","Rb"],0,"একই গ্রুপে উপরে পারমাণবিক ব্যাসার্ধ ছোট, তাই Li এর আয়নীকরণ শক্তি সর্বোচ্চ। (পৃ. ৭২)"],
+["Cu, Ag ও Au কে কী বলা হয়?",["ক্ষার ধাতু","মুদ্রা ধাতু (coin metals)","হ্যালোজেন","নিষ্ক্রিয় গ্যাস"],1,"গ্রুপ ১১ এর এই ধাতুগুলো প্রাচীনকাল থেকে মুদ্রা তৈরিতে ব্যবহৃত হয়েছে। (পৃ. ৭৪)"]],
+"৫":[
+["পটাসিয়ামের (K) যোজ্যতা ইলেকট্রন সংখ্যা কত?",["১","২","৭","৮"],0,"K এর সর্ববহিঃস্থ শক্তিস্তরে ১টি ইলেকট্রন আছে। (পৃ. ৮৪)"],
+["নাইট্রোজেনের (N, পারমাণবিক সংখ্যা ৭) যোজ্যতা ইলেকট্রন কত?",["২","৩","৫","৭"],2,"N এর ইলেকট্রন বিন্যাস ২, ৫; বহিঃস্তরে ৫টি ইলেকট্রন। (পৃ. ৮৪)"],
+["ধাতু বিদ্যুৎ পরিবাহী হওয়ার প্রধান কারণ কী?",["মুক্ত (ডিলোকালাইজড) ইলেকট্রন","মুক্ত প্রোটন","অণুর ঘূর্ণন","নিউট্রনের উপস্থিতি"],0,"ধাতব জালকে মুক্তভাবে চলাচলকারী ডিলোকালাইজড ইলেকট্রনই বিদ্যুৎ বহন করে। (পৃ. ১০৫)"],
+["FeCl₂ যৌগে Fe এর সুপ্ত যোজনী কত? (Fe এর সর্বোচ্চ যোজনী ৩)",["০","১","২","৩"],1,"সক্রিয় যোজনী ২, সর্বোচ্চ ৩; সুপ্ত যোজনী = ৩ − ২ = ১। (পৃ. ৮৫)"],
+["অ্যালুমিনিয়াম অক্সাইডের সংকেত কোনটি? (Al এর যোজনী ৩, O এর যোজনী ২)",["AlO","Al₂O₃","Al₃O₂","AlO₃"],1,"যোজনী আড়াআড়ি বসালে Al₂O₃ হয়। (পৃ. ৮৮)"],
+["সালফেট (SO₄²⁻) মূলকের যোজনী কত?",["−২","২","৪","৬"],1,"আধানের সংখ্যাই যোজনী; যোজনীর কোনো চিহ্ন (+ বা −) থাকে না, তাই যোজনী ২। (পৃ. ৮৭)"],
+["অষ্টক নিয়ম (octet rule) অনুযায়ী পরমাণু সর্ববহিঃস্থ স্তরে কয়টি ইলেকট্রন অর্জন করতে চায়?",["২","৪","৬","৮"],3,"নিষ্ক্রিয় গ্যাসের মতো ৮ ইলেকট্রনের (অষ্টক) স্থায়ী বিন্যাস পেতে চায়। (পৃ. ৯০)"],
+["NaCl এ কোন ধরনের রাসায়নিক বন্ধন আছে?",["আয়নিক বন্ধন","সমযোজী বন্ধন","ধাতব বন্ধন","হাইড্রোজেন বন্ধন"],0,"ধাতু Na ইলেকট্রন দেয়, অধাতু Cl গ্রহণ করে; Na⁺ ও Cl⁻ এর তড়িৎ আকর্ষণই আয়নিক বন্ধন। (পৃ. ৯৫)"],
+["Cl₂ অণুতে ক্লোরিন পরমাণুদের মধ্যে কোন বন্ধন আছে?",["আয়নিক","সমযোজী","ধাতব","কোনো বন্ধন নেই"],1,"দুই অধাতু পরমাণু একটি ইলেকট্রন জোড়া শেয়ার করে সমযোজী বন্ধন তৈরি করে। (পৃ. ৯৭)"],
+["অক্সিজেন অণুতে (O₂) পরমাণু দুটির মধ্যে কয়টি সমযোজী বন্ধন থাকে?",["১টি","২টি","৩টি","৪টি"],1,"প্রতিটি O পরমাণু ২টি ইলেকট্রন শেয়ার করে, তাই দ্বিবন্ধন (O=O)। (পৃ. ৯৮)"],
+["নিচের কোনটি পানিতে দ্রবীভূত হয়?",["মিথেন","ন্যাফথালিন","ক্যালসিয়াম ক্লোরাইড","কার্বন টেট্রাক্লোরাইড"],2,"CaCl₂ আয়নিক যৌগ, পোলার দ্রাবক পানিতে দ্রবীভূত হয়। অন্যগুলো সমযোজী ও অপোলার। (পৃ. ১০০-১০১)"],
+["নিচের কোনটির জলীয় দ্রবণ বিদ্যুৎ পরিবাহী নয়?",["NaCl","CaCl₂","HCl","গ্লুকোজ (C₆H₁₂O₆)"],3,"গ্লুকোজ সমযোজী যৌগ, দ্রবণে মুক্ত আয়ন তৈরি করে না, তাই বিদ্যুৎ পরিবহন করে না। (পৃ. ১০২)"]],
+"৬":[
+["১ মোল পদার্থে কয়টি কণা (অণু/পরমাণু/আয়ন) থাকে?",["6.023 × 10²²","6.023 × 10²³","6.023 × 10²⁴","3.011 × 10²³"],1,"১ মোল = অ্যাভোগাড্রো সংখ্যা (6.023 × 10²³) সংখ্যক কণা। (পৃ. ১১১)"],
+["STP (0°C, ১ atm) তে ১ মোল যেকোনো গ্যাসের আয়তন কত?",["11.2 L","22.4 L","24 L","44.8 L"],1,"STP তে গ্যাসের মোলার আয়তন 22.4 L। (পৃ. ১১৩)"],
+["পানির (H₂O) আণবিক ভর কত? (H = 1, O = 16)",["16","17","18","20"],2,"2 × 1 + 16 = 18; তাই ১ মোল পানি = 18 g। (পৃ. ১১১)"],
+["STP তে 2 g হাইড্রোজেন (H₂) গ্যাসের আয়তন কত?",["11.2 L","22.4 L","44.8 L","2.24 L"],1,"H₂ এর আণবিক ভর 2, তাই 2 g = ১ মোল = 22.4 L। (পৃ. ১১৩)"],
+["STP তে 10 g হাইড্রোজেন গ্যাসের আয়তন কত?",["22.4 L","56 L","112 L","224 L"],2,"মোল = 10/2 = 5; আয়তন = 5 × 22.4 = 112 L। (পৃ. ১১৩)"],
+["১ লিটার দ্রবণে ১ মোল দ্রব থাকলে সেটি কোন দ্রবণ?",["ডেসিমোলার","সেমিমোলার","মোলার","সম্পৃক্ত"],2,"১ L দ্রবণে ১ mol দ্রব = ১ মোলার (1 M) দ্রবণ। (পৃ. ১১৫)"],
+["দ্রবের ভর নির্ণয়ের সূত্র কোনটি? (S = মোলার ঘনমাত্রা, V = mL, M = আণবিক ভর)",["w = S × V × M / 1000","w = S × M / V","w = V × M / S","w = S × V / M"],0,"w = S × V × M / 1000। (পৃ. ১১৬)"],
+["250 mL 0.1 M Na₂CO₃ দ্রবণ তৈরিতে কত গ্রাম Na₂CO₃ লাগে? (M = 106)",["2.65 g","5.3 g","10.6 g","26.5 g"],0,"w = 0.1 × 250 × 106 / 1000 = 2.65 g। (পৃ. ১৩৬)"],
+["গ্লুকোজের (C₆H₁₂O₆) এম্পিরিক্যাল সংকেত কোনটি?",["CHO","CH₂O","C₂H₄O₂","C₃H₆O₃"],1,"C : H : O = 6 : 12 : 6 = 1 : 2 : 1, তাই CH₂O। (পৃ. ১২২)"],
+["এম্পিরিক্যাল সংকেত CH (ভর 13) এবং আণবিক ভর 78 হলে আণবিক সংকেত কী?",["C₂H₂","C₄H₄","C₆H₆","C₈H₈"],2,"n = 78/13 = 6, তাই (CH)₆ = C₆H₆। (পৃ. ১২৪)"],
+["H₂ + Cl₂ → 2HCl বিক্রিয়ায় 5 g H₂ ও 75 g Cl₂ নিলে সীমিত বিক্রিয়ক (limiting reactant) কোনটি?",["H₂","Cl₂","HCl","কোনোটিই নয়"],1,"5 g H₂ এর জন্য 177.5 g Cl₂ লাগে, আছে 75 g; তাই Cl₂ সীমিত বিক্রিয়ক। (পৃ. ১৩২)"],
+["শতকরা ফলন (% yield) = ?",["প্রকৃত ফলন / হিসাবকৃত ফলন × 100","হিসাবকৃত ফলন / প্রকৃত ফলন × 100","প্রকৃত ফলন × হিসাবকৃত ফলন","প্রকৃত ফলন − হিসাবকৃত ফলন"],0,"% yield = (প্রকৃত প্রাপ্ত পরিমাণ / হিসাবকৃত পরিমাণ) × 100। (পৃ. ১৩৪)"]],
+"৭":[
+["CaCO₃ + 2HCl → CaCl₂ + CO₂ + H₂O কোন ধরনের পরিবর্তন?",["ভৌত পরিবর্তন","রাসায়নিক পরিবর্তন","শুধু অবস্থার পরিবর্তন","কোনো পরিবর্তন নয়"],1,"নতুন পদার্থ তৈরি হয়েছে, তাই এটি রাসায়নিক পরিবর্তন। (পৃ. ১৪৪)"],
+["তাপোৎপাদী (exothermic) বিক্রিয়ায় ΔH এর মান কেমন হয়?",["ধনাত্মক","ঋণাত্মক","শূন্য","সবসময় 100"],1,"তাপ নির্গত হলে ΔH ঋণাত্মক; তাপ শোষিত হলে ধনাত্মক। (পৃ. ১৪৬)"],
+["KMnO₄ এ Mn এর জারণ সংখ্যা কত?",["+2","+4","+6","+7"],3,"(+1) + x + 4(−2) = 0 ⇒ x = +7। (পৃ. ১৪৯-১৫০)"],
+["H₂SO₄ এ সালফারের (S) জারণ সংখ্যা কত?",["+2","+4","+6","−2"],2,"2(+1) + x + 4(−2) = 0 ⇒ x = +6। (পৃ. ১৫০)"],
+["জারণ (oxidation) বলতে কী বোঝায়?",["ইলেকট্রন গ্রহণ","ইলেকট্রন দান","প্রোটন গ্রহণ","নিউট্রন দান"],1,"ইলেকট্রন দান করাই জারণ (যেমন Na → Na⁺ + e⁻)। (পৃ. ১৪৭)"],
+["2Na + Cl₂ → 2NaCl বিক্রিয়ায় Cl₂ কী হিসেবে কাজ করে?",["বিজারক","জারক","অনুঘটক","প্রশমক"],1,"Cl₂ ইলেকট্রন গ্রহণ করে (বিজারিত হয়), তাই এটি জারক (oxidant)। (পৃ. ১৪৭)"],
+["2FeCl₂ + Cl₂ → 2FeCl₃ কোন ধরনের বিক্রিয়া?",["বিয়োজন","প্রতিস্থাপন","সংযোজন","প্রশমন"],2,"দুটি বিক্রিয়ক মিলে একটি যৌগ তৈরি হয়েছে, এটি সংযোজন (addition) বিক্রিয়া। (পৃ. ১৫১)"],
+["শক্তিশালী এসিড ও শক্তিশালী ক্ষারের প্রশমন তাপ প্রতি মোল পানির জন্য কত?",["−57.34 kJ","−92 kJ","+180 kJ","−100 kJ"],0,"সব ক্ষেত্রেই প্রকৃত বিক্রিয়া H⁺ + OH⁻ → H₂O, তাই তাপ ধ্রুব: −57.34 kJ। (পৃ. ১৫৪)"],
+["NaCl + AgNO₃ → AgCl↓ + NaNO₃ কোন ধরনের বিক্রিয়া?",["প্রশমন","অধঃক্ষেপণ","জারণ-বিজারণ","পলিমারকরণ"],1,"অদ্রবণীয় AgCl কঠিন অধঃক্ষেপ তৈরি হয়েছে। (পৃ. ১৫৫)"],
+["N₂ + 3H₂ ⇌ 2NH₃ সাম্যাবস্থায় চাপ বাড়ালে সাম্য কোনদিকে সরে?",["বামে","ডানে (NH₃ এর দিকে)","কোনো পরিবর্তন নেই","বিক্রিয়া থেমে যায়"],1,"বাম পাশে ৪ মোল, ডান পাশে ২ মোল গ্যাস; চাপ বাড়ালে কম মোলের দিকে (ডানে) সরে। (পৃ. ১৬৪)"],
+["N₂ + 3H₂ ⇌ 2NH₃ + 92 kJ বিক্রিয়ায় তাপমাত্রা বাড়ালে সাম্য কোনদিকে সরে?",["ডানে","বামে","কোনো পরিবর্তন নেই","উভয়দিকে সমান"],1,"সম্মুখ বিক্রিয়া তাপোৎপাদী; তাপ বাড়ালে সাম্য বামে সরে (NH₃ কমে)। (পৃ. ১৬৩)"],
+["N₂ + O₂ ⇌ 2NO সাম্যাবস্থায় চাপের প্রভাব কী?",["ডানে সরে","বামে সরে","কোনো প্রভাব নেই","NO ভেঙে যায়"],2,"উভয় পাশেই গ্যাসের মোল সংখ্যা ২, তাই চাপ বদলালে সাম্যের স্থান বদলায় না। (পৃ. ১৬৪)"]]};
+var app=document.getElementById("app"),st={},mode="bank";document.body.classList.add("chatting");
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function put(x){app.innerHTML=x;app.scrollTop=0;window.scrollTo(0,0)}
+function home(){put('<a class="lnk" href="./">← প্রশ্ন করো</a><h2 style="margin:14px 0 4px">📝 অধ্যায়ভিত্তিক MCQ টেস্ট</h2><div style="color:var(--mute)">অধ্যায় বেছে নাও। প্রতিটি উত্তরের পরেই সঠিক উত্তর ও ব্যাখ্যা দেখতে পাবে।</div><div class="mode" role="group" aria-label="মোড"><button class="btn'+(mode=="bank"?"":" alt")+'" id="mb">📚 বইয়ের প্রশ্ন</button><button class="btn'+(mode=="ai"?"":" alt")+'" id="ma">🤖 AI নতুন প্রশ্ন</button></div>'+(mode=="ai"?'<div class="exp">প্রতিবার AI পাঠ্যবইয়ের নোট থেকে ৫টি নতুন প্রশ্ন বানায়। AI ভুল করতে পারে, তাই উত্তর বইয়ের সাথে মিলিয়ে নিও। (প্রতিদিন সীমিত সংখ্যক বার)</div>':"")+'<div class="grid">'+
+  CH.map(function(c){var b=BANK[c[0]];return b?'<button class="card" data-c="'+c[0]+'"><b>অধ্যায় '+c[0]+'</b><span>'+esc(c[2])+'</span><small>'+(mode=="ai"?"৫টি নতুন AI প্রশ্ন":b.length+"টি প্রশ্ন")+'</small></button>':'<div class="card off"><b>অধ্যায় '+c[0]+'</b><span>'+esc(c[2])+'</span><small>শীঘ্রই আসছে</small></div>'}).join("")+'</div>');
+  document.getElementById("mb").onclick=function(){mode="bank";home()};document.getElementById("ma").onclick=function(){mode="ai";home()};
+  [].forEach.call(app.querySelectorAll("button.card"),function(b){b.onclick=function(){var c=b.getAttribute("data-c");if(mode=="ai")startAI(c);else start(c,BANK[c])}})}
+function start(ch,src,ai){st={ai:!!ai,ch:ch,i:0,ok:0,bad:[],qs:shuf(src).map(function(q){var p=shuf([0,1,2,3]);return{q:q[0],o:p.map(function(i){return q[1][i]}),a:p.indexOf(q[2]),e:q[3],raw:q}})};show()}
+function show(){var q=st.qs[st.i],n=st.qs.length;
+  put('<div class="panel"><div style="display:flex;justify-content:space-between;color:var(--mute)"><span>অধ্যায় '+st.ch+(st.ai?' · 🤖 AI-নির্মিত':'')+'</span><span>প্রশ্ন '+(st.i+1)+' / '+n+'</span></div><div class="pb"><i style="width:'+(st.i/n*100)+'%"></i></div><div class="qt">'+esc(q.q)+'</div><div id="ops">'+
+  q.o.map(function(o,i){return'<button class="op" data-i="'+i+'">'+esc(o)+'</button>'}).join("")+'</div><div id="fb" role="status" aria-live="polite"></div></div>');
+  var L=["ক","খ","গ","ঘ"];[].forEach.call(app.querySelectorAll(".op"),function(b,i){b.textContent=L[i]+") "+q.o[i];b.onclick=function(){pick(i)}})}
+function pick(i){var q=st.qs[st.i],ok=i==q.a;if(ok)st.ok++;else st.bad.push(q.raw);
+  [].forEach.call(app.querySelectorAll(".op"),function(b,k){b.disabled=true;if(k==q.a)b.classList.add("ok");else if(k==i)b.classList.add("no")});
+  var last=st.i==st.qs.length-1;
+  document.getElementById("fb").innerHTML='<div class="exp"><b>'+(ok?"✅ সঠিক!":"❌ ভুল। সঠিক উত্তর: "+["ক","খ","গ","ঘ"][q.a])+'</b><br>'+esc(q.e)+'</div><button class="btn" id="nx">'+(last?"ফলাফল দেখো":"পরবর্তী প্রশ্ন →")+'</button>';
+  var nx=document.getElementById("nx");nx.onclick=function(){if(last)result();else{st.i++;show()}};nx.focus()}
+function result(){var n=st.qs.length,p=Math.round(st.ok/n*100),m=p>=80?"চমৎকার! 🎉":p>=50?"ভালো হয়েছে, আরেকটু অনুশীলন করো। 💪":"চিন্তা নেই, ব্যাখ্যাগুলো পড়ে আবার চেষ্টা করো। 📖";
+  put('<div class="panel"><div>অধ্যায় '+st.ch+' এর ফলাফল</div><div class="sc">'+st.ok+' / '+n+' ('+p+'%)</div><div style="margin:6px 0 10px">'+m+'</div>'+
+  (st.bad.length?'<h3>যে প্রশ্নগুলো ভুল হয়েছে</h3>'+st.bad.map(function(q){return'<div class="rv"><b>'+esc(q[0])+'</b><br>✅ সঠিক: '+esc(q[1][q[2]])+'<br><span style="color:var(--mute)">'+esc(q[3])+'</span></div>'}).join(""):'<div class="exp">সবগুলো সঠিক! 🌟</div>')+
+  '<button class="btn" id="again">আবার টেস্ট দাও</button>'+(st.bad.length?'<button class="btn alt" id="wr">ভুলগুলো আবার</button>':'')+'<button class="btn alt" id="hm">অন্য অধ্যায়</button></div>');
+  var c=st.ch,bad=st.bad;var ai=st.ai;document.getElementById("again").onclick=function(){if(ai)startAI(c);else start(c,BANK[c])};document.getElementById("hm").onclick=home;
+  if(bad.length)document.getElementById("wr").onclick=function(){start(c,bad,ai)}}
+async function startAI(c){
+  put('<div class="panel"><div class="qt" role="status">🤖 নতুন প্রশ্ন তৈরি হচ্ছে… একটু অপেক্ষা করো।</div></div>');
+  try{
+    var r=await fetch("/api/quiz",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chapter:c})}),j=await r.json();
+    if(!r.ok||!j.questions)throw new Error(j.error||"");
+    start(c,j.questions,true);
+  }catch(e){put('<div class="panel"><div class="qt">😕 '+esc(e.message||"প্রশ্ন তৈরি করা যায়নি। আবার চেষ্টা করো।")+'</div><button class="btn" id="rt">আবার চেষ্টা করো</button><button class="btn alt" id="hm2">অন্য অধ্যায়</button></div>');
+    document.getElementById("rt").onclick=function(){startAI(c)};document.getElementById("hm2").onclick=home}
+}
+home();
+</script>
+</body>
+</html>
