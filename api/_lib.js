@@ -1,5 +1,5 @@
 // Shared helpers: rate limiting (Upstash Redis if configured, else in-memory).
-const LIM = { chat: { min: 4, day: 20 }, quiz: { min: 2, day: 8 } };
+const LIM = { chat: { min: 4, day: 20 }, quiz: { min: 2, day: 8 }, fb: { min: 2, day: 5 } };
 const GLOBAL = Number(process.env.GLOBAL_DAILY_LIMIT || 300);
 const U = process.env.UPSTASH_REDIS_REST_URL, T = process.env.UPSTASH_REDIS_REST_TOKEN;
 const mem = globalThis.__mem || (globalThis.__mem = new Map());
@@ -34,9 +34,18 @@ async function limit(ip, kind) {
   if (n[1] > L.day) return "day";
   return null;
 }
+// run raw Redis commands (returns null if Upstash is not configured or fails)
+async function rpipe(cmds) {
+  if (!(U && T)) return null;
+  try {
+    const r = await fetch(U.replace(/\/$/, "") + "/pipeline", { method: "POST", headers: { Authorization: "Bearer " + T, "content-type": "application/json" }, body: JSON.stringify(cmds) });
+    const j = await r.json();
+    return Array.isArray(j) && j.every(x => !x.error) ? j : null;
+  } catch (e) { return null; }
+}
 const MSG = {
   global: "আজকের মতো সেবা সীমা শেষ। কাল আবার চেষ্টা করো।",
   minute: "তুমি অনেক দ্রুত অনুরোধ করছ। একটু অপেক্ষা করে আবার চেষ্টা করো।",
   day: "আজকের জন্য তোমার সীমা শেষ। কাল আবার চেষ্টা করো।",
 };
-module.exports = { limit, MSG };
+module.exports = { limit, rpipe, MSG };
