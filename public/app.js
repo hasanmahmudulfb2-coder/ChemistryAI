@@ -1,7 +1,7 @@
 /* ChemiAI shared script: home-screen app support + feedback box */
 (function () {
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
-  var css = ".fbb{position:fixed;top:8px;right:8px;z-index:20;min-height:40px;padding:0 14px;border:1px solid var(--brand,#0f7b63);border-radius:999px;background:var(--card,#fff);color:var(--ink,#1c2b27);font:inherit;font-size:.85rem;cursor:pointer}" +
+  var css = ".fbb{position:fixed;top:4px;right:6px;z-index:20;min-height:28px;padding:0 10px;border:1px solid var(--brand,#0f7b63);border-radius:999px;background:var(--card,#fff);color:var(--ink,#1c2b27);font:inherit;font-size:.72rem;line-height:1;cursor:pointer}.fbb::after{content:'';position:absolute;inset:-8px}" +
     "dialog.fbd{border:1px solid var(--line,#d8e2de);border-radius:16px;background:var(--card,#fff);color:var(--ink,#1c2b27);width:min(440px,92vw);padding:18px;font-family:inherit}dialog.fbd::backdrop{background:rgba(0,0,0,.45)}" +
     ".fbd h2{margin:0 0 8px;font-size:1.1rem}.fbd textarea{width:100%;min-height:90px;border:1px solid var(--line,#d8e2de);border-radius:10px;padding:8px;font:inherit;background:var(--bg,#f6f8f7);color:inherit;resize:vertical}" +
     ".fbs{display:flex;gap:4px;margin:6px 0}.fbs button{border:0;background:none;font-size:1.8rem;cursor:pointer;min-width:44px;min-height:44px;color:#c9d3cf}.fbs button.on{color:#f4a62a}" +
