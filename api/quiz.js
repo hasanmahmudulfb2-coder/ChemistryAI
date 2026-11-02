@@ -1,6 +1,6 @@
 // AI practice questions: generates new MCQs from the textbook notes of one chapter.
 const NOTES = require("./notes");
-const { limit, MSG } = require("./_lib");
+const { limit, MSG, GLOSSARY } = require("./_lib");
 const MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
 
 function valid(arr) {
@@ -29,6 +29,7 @@ module.exports = async function handler(req, res) {
 
   const prompt = `তুমি বাংলাদেশের SSC রসায়ন শিক্ষক। নিচের পাঠ্যবইয়ের নোট থেকে ৫টি নতুন বহুনির্বাচনি প্রশ্ন (MCQ) তৈরি করো।
 নিয়ম: (১) শুধু নোটে থাকা তথ্য ব্যবহার করো, নিজে কিছু যোগ করো না। (২) প্রতিটি প্রশ্নে ঠিক ৪টি আলাদা অপশন, ঠিক একটি সঠিক। (৩) ভাষা সহজ বাংলা; রাসায়নিক সংকেত ইউনিকোডে (H₂O, CO₂, →) লেখো, LaTeX বা $ ব্যবহার করো না। (৪) ব্যাখ্যা (e) ১-২ বাক্যে এবং নোটের তথ্য থেকে; নোটে পৃষ্ঠা বা অনুচ্ছেদ নম্বর থাকলেই শুধু তা উল্লেখ করো। (৫) প্রশ্নগুলো বিভিন্ন বিষয়ের ও বিভিন্ন কঠিনতার হোক। (৬) সঠিক উত্তরের অবস্থান (a) এলোমেলো রাখো।
+(৭) ${GLOSSARY}
 শুধু JSON অ্যারে দাও, অন্য কিছু নয়: [{"q":"প্রশ্ন","o":["ক","খ","গ","ঘ"],"a":সঠিক অপশনের ইনডেক্স 0-3,"e":"ব্যাখ্যা"}]
 
 নোট:
