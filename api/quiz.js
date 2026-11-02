@@ -12,7 +12,8 @@ function valid(arr) {
     if (new Set(o).size !== 4 || o.some(s => !s)) continue;
     out.push([x.q.trim().slice(0, 400), o, x.a, x.e.trim().slice(0, 500)]);
   }
-  return out.length >= 3 ? out.slice(0, 6) : null;
+  const seen = new Set(), u = out.filter(x => !seen.has(x[0]) && seen.add(x[0]));
+  return u.length >= 10 ? u.slice(0, 20) : null;
 }
 
 module.exports = async function handler(req, res) {
@@ -27,7 +28,7 @@ module.exports = async function handler(req, res) {
   const why = await limit(ip, "quiz");
   if (why) return fail(429, MSG[why]);
 
-  const prompt = `তুমি বাংলাদেশের SSC রসায়ন শিক্ষক। নিচের পাঠ্যবইয়ের নোট থেকে ৫টি নতুন বহুনির্বাচনি প্রশ্ন (MCQ) তৈরি করো।
+  const prompt = `তুমি বাংলাদেশের SSC রসায়ন শিক্ষক। নিচের পাঠ্যবইয়ের নোট থেকে ২০টি নতুন বহুনির্বাচনি প্রশ্ন (MCQ) তৈরি করো (অধ্যায়ের সব অংশ থেকে, কোনো প্রশ্ন একই নয়)।
 নিয়ম: (১) শুধু নোটে থাকা তথ্য ব্যবহার করো, নিজে কিছু যোগ করো না। (২) প্রতিটি প্রশ্নে ঠিক ৪টি আলাদা অপশন, ঠিক একটি সঠিক। (৩) ভাষা সহজ বাংলা; রাসায়নিক সংকেত ইউনিকোডে (H₂O, CO₂, →) লেখো, LaTeX বা $ ব্যবহার করো না। (৪) ব্যাখ্যা (e) ১-২ বাক্যে এবং নোটের তথ্য থেকে; নোটে পৃষ্ঠা বা অনুচ্ছেদ নম্বর থাকলেই শুধু তা উল্লেখ করো। (৫) প্রশ্নগুলো বিভিন্ন বিষয়ের ও বিভিন্ন কঠিনতার হোক। (৬) সঠিক উত্তরের অবস্থান (a) এলোমেলো রাখো।
 (৭) ${GLOSSARY}
 শুধু JSON অ্যারে দাও, অন্য কিছু নয়: [{"q":"প্রশ্ন","o":["ক","খ","গ","ঘ"],"a":সঠিক অপশনের ইনডেক্স 0-3,"e":"ব্যাখ্যা"}]
@@ -38,7 +39,7 @@ ${notes}`;
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(MODEL)}:generateContent`, {
       method: "POST",
       headers: { "content-type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
-      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 3000, temperature: 0.7, responseMimeType: "application/json" } }),
+      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 9000, temperature: 0.7, responseMimeType: "application/json" } }),
     });
     if (!r.ok) { console.error("Gemini quiz error", r.status, await r.text().catch(() => "")); return fail(r.status === 429 ? 429 : 502, r.status === 429 ? "এখন অনেক শিক্ষার্থী ব্যবহার করছে। একটু পরে চেষ্টা করো।" : "প্রশ্ন তৈরি করা যায়নি। আবার চেষ্টা করো।"); }
     const j = await r.json();
