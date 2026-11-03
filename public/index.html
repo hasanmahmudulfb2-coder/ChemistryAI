@@ -92,6 +92,11 @@ body.chatting .hero h1{font-size:1.15rem}
 .lnk.hot:hover{background:#b71c1c;border-color:#b71c1c}
 @keyframes hot{0%,100%{box-shadow:0 0 0 0 rgba(211,47,47,.7);transform:scale(1)}50%{box-shadow:0 0 14px 6px rgba(211,47,47,.35);transform:scale(1.07)}}
 @media (prefers-reduced-motion:reduce){.lnk.hot{animation:none}}
+button.send{width:52px;min-width:52px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+.mic{display:inline-flex;align-items:center;justify-content:center;min-width:52px}
+.mic.on{background:#d32f2f;border-color:#d32f2f;color:#fff;animation:rec 1.2s ease-in-out infinite}
+@keyframes rec{0%,100%{box-shadow:0 0 0 0 rgba(211,47,47,.6)}50%{box-shadow:0 0 0 9px rgba(211,47,47,0)}}
+@media (prefers-reduced-motion:reduce){.mic.on{animation:none}}
 </style>
 </head>
 <body>
@@ -162,8 +167,8 @@ body.chatting .hero h1{font-size:1.15rem}
 <div class="bar">
   <div class="sel"><div class="fs" role="group" aria-label="লেখার আকার"><button type="button" id="fsm" aria-label="লেখা ছোট করো">A−</button><button type="button" id="fsp" aria-label="লেখা বড় করো">A+</button></div><a class="lnk hot" href="test.html">📝 MCQ টেস্ট</a><select id="chap" aria-label="অধ্যায়"><option value="">অধ্যায় (ঐচ্ছিক)</option></select></div>
   <div class="pv" id="pv"><img id="pvi" alt="ছবি"><button id="pvx" aria-label="ছবি সরাও">✕ সরাও</button></div>
-  <div class="row"><button class="cam" id="pick" aria-label="ছবি তোলো বা বাছাই করো" title="ছবি দাও">📷</button><input type="file" id="file" accept="image/*" hidden><textarea id="q" rows="1" placeholder="প্রশ্ন লেখো বা 📷 দিয়ে ছবি দাও…"></textarea><button class="send" id="go">পাঠাও</button></div>
-  <div class="note">🔒 নাম, ফোন নম্বর বা ব্যক্তিগত তথ্য লিখো না। উত্তর AI দেয়, তাই গুরুত্বপূর্ণ হিসাব পাঠ্যবই ও শিক্ষকের সাথে মিলিয়ে নিও।</div>
+  <div class="row"><button class="cam" id="pick" aria-label="ছবি তোলো বা বাছাই করো" title="ছবি দাও">📷</button><input type="file" id="file" accept="image/*" hidden><textarea id="q" rows="1" placeholder="প্রশ্ন লেখো বা বলো…"></textarea><button class="cam mic" id="mic" type="button" aria-label="কথা বলে প্রশ্ন করো" title="কথা বলে প্রশ্ন করো (ব্রাউজার তোমার কথা তাদের স্পিচ সার্ভিসে পাঠাতে পারে)"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button class="send" id="go" type="button" aria-label="পাঠাও" title="পাঠাও"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+  <div class="note" lang="en">I can make mistakes. Please check before use.</div>
 </div>
 <script>
 var CH=[["১","Concepts of Chemistry","রসায়নের ধারণা","1-16"],["২","States of Matter","পদার্থের অবস্থা","17-34"],["৩","Structure of Matter","পদার্থের গঠন","35-58"],["৪","Periodic Table","পর্যায় সারণি","59-81"],["৫","Chemical Bond","রাসায়নিক বন্ধন","82-108"],["৬","Concept of Mole and Chemical Counting","মোল ধারণা ও রাসায়নিক গণনা","109-141"],["৭","Chemical Reactions","রাসায়নিক বিক্রিয়া","142-167"],["৮","Chemistry and Energy","রসায়ন ও শক্তি","168-205"],["৯","Acid-Base Balance","এসিড-ক্ষার সমতা","206-232"],["১০","Mineral Resources: Metal-Nonmetal","খনিজ সম্পদ: ধাতু-অধাতু","233-260"],["১১","Mineral Resources: Fossils","খনিজ সম্পদ: জীবাশ্ম","261-286"],["১২","Chemistry in Our Lives","আমাদের জীবনে রসায়ন","287-304"]];
@@ -194,7 +199,16 @@ function shrink(f){return new Promise(function(ok,no){var u=URL.createObjectURL(
     var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);
     var d=c.toDataURL("image/jpeg",0.8);URL.revokeObjectURL(u);ok({data:d.split(",")[1],url:d})};
   i.onerror=function(){URL.revokeObjectURL(u);no()};i.src=u})}
-async function send(){
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition,mic=document.getElementById("mic"),rec=null,listening=false;
+if(!SR){mic.style.display="none"}else{mic.onclick=function(){
+  if(listening){try{rec.stop()}catch(e){}return}
+  rec=new SR();rec.lang="bn-BD";rec.interimResults=true;rec.continuous=false;var base=q.value?q.value.trim()+" ":"";
+  rec.onstart=function(){listening=true;mic.classList.add("on");mic.setAttribute("aria-label","রেকর্ডিং বন্ধ করো")};
+  rec.onresult=function(e){var s="";for(var i=0;i<e.results.length;i++)s+=e.results[i][0].transcript;q.value=base+s};
+  rec.onerror=function(e){if(e.error=="not-allowed"||e.error=="service-not-allowed")add("a","🎤 মাইক্রোফোন ব্যবহারের অনুমতি দাও (ব্রাউজারের ঠিকানার পাশের তালা চিহ্নে চাপ দিয়ে)।");else if(e.error=="no-speech")add("a","🎤 কোনো কথা শোনা যায়নি। আবার চেষ্টা করো।");else if(e.error!="aborted")add("a","🎤 ভয়েস ইনপুট কাজ করছে না। লিখে প্রশ্ন করো।")};
+  rec.onend=function(){listening=false;mic.classList.remove("on");mic.setAttribute("aria-label","কথা বলে প্রশ্ন করো");q.focus()};
+  try{rec.start()}catch(e){}}}
+async function send(){if(listening&&rec){try{rec.stop()}catch(e){}}
   var t=q.value.trim(),cur=img;if((!t&&!cur)||go.disabled)return;
   if(t.length>1200){add("a","প্রশ্নটি একটু ছোট করে লেখো (১২০০ অক্ষরের মধ্যে)।");return}
   if(!t)t="এই ছবির প্রশ্ন বা সমীকরণটি সমাধান করো।";
